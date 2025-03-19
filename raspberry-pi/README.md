@@ -9,5 +9,5 @@ sudo python3 -m venv myenv
 source myenv/bin/activate
 
 # Installing packages
-pip install hx711
+pip install hx711 RPi.GPIO
 ```
