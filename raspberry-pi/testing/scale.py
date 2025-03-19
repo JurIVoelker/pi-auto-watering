@@ -1,7 +1,7 @@
 import RPi.GPIO as GPIO
 import time
 from hx711 import HX711
-
+#test
 GPIO.setmode(GPIO.BCM)
 
 DT_PIN = 20  # Data pin
