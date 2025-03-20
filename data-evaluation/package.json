@@ -1,0 +1,26 @@
+{
+  "name": "auto-watering-system-evaluation",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "eval-results": "npx tsx ./eval-results.ts"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/JurIVoelker/pi-auto-watering.git"
+  },
+  "author": "Juri Völker",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/JurIVoelker/pi-auto-watering/issues"
+  },
+  "homepage": "https://github.com/JurIVoelker/pi-auto-watering#readme",
+  "description": "",
+  "devDependencies": {
+    "@types/node": "^22.13.10"
+  },
+  "dependencies": {
+    "chartjs-adapter-date-fns": "^3.0.0",
+    "chartjs-node-canvas": "^4.1.6"
+  }
+}
