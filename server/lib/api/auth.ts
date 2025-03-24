@@ -44,7 +44,7 @@ export const getBodyFromRequest = async (
   let body;
   try {
     body = await request.json();
-  } catch (error) {
+  } catch {
     return {
       error: [getZodIssue("Invalid JSON")],
     };
@@ -55,8 +55,7 @@ export const getBodyFromRequest = async (
 export const validateRequest = async (
   request: NextRequest,
   permissions: Permission[],
-  // eslint-disable-next-line @typescript-eslint
-  // /no-explicit-any
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   schema: ZodObject<any>
 ): Promise<{ body?: unknown; error?: ZodIssue[] | null }> => {
   const { body, error: bodyError } = await getBodyFromRequest(request);
