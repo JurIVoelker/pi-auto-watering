@@ -23,8 +23,13 @@ export const hasServersidePermission = async (
       }
     }
     if (permission === "server") {
-      // TODO check server auth
-      return false;
+      const { headers } = request;
+      const authHeader = headers.get("api-key");
+      const { SERVER_SECRET } = process.env;
+      if (!SERVER_SECRET) console.error("SERVER_SECRET not set");
+      if (authHeader === SERVER_SECRET) {
+        return true;
+      }
     }
   }
   return false;

@@ -19,7 +19,7 @@ export type POST_MEASURE_WEIGHT_TYPE = z.infer<
 export async function POST(req: NextRequest) {
   const { body, error } = await validateRequest(
     req,
-    ["user"],
+    ["server"],
     POST_MEASURE_WEIGHT_SCHEMA
   );
 
