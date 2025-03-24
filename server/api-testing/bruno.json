@@ -1,0 +1,9 @@
+{
+  "version": "1",
+  "name": "raspberry-pi-watering system",
+  "type": "collection",
+  "ignore": [
+    "node_modules",
+    ".git"
+  ]
+}

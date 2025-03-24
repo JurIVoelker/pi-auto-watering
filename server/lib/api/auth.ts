@@ -15,10 +15,12 @@ export const hasServersidePermission = async (
   for (const permission of permissions) {
     if (permission === "user") {
       const { headers } = request;
-      const authHeader = headers.get("authorization");
-      console.log(authHeader);
-      // TODO check auth
-      return true;
+      const authHeader = headers.get("api-key");
+      const { USER_SECRET } = process.env;
+      if (!USER_SECRET) console.error("USER_SECRET not set");
+      if (authHeader === USER_SECRET) {
+        return true;
+      }
     }
     if (permission === "server") {
       // TODO check server auth
@@ -37,7 +39,7 @@ export const getBodyFromRequest = async (
   let body;
   try {
     body = await request.json();
-  } catch {
+  } catch (error) {
     return {
       error: [getZodIssue("Invalid JSON")],
     };
@@ -48,9 +50,10 @@ export const getBodyFromRequest = async (
 export const validateRequest = async (
   request: NextRequest,
   permissions: Permission[],
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  // eslint-disable-next-line @typescript-eslint
+  // /no-explicit-any
   schema: ZodObject<any>
-): Promise<{ body?: unknown; error: ZodIssue[] | null }> => {
+): Promise<{ body?: unknown; error?: ZodIssue[] | null }> => {
   const { body, error: bodyError } = await getBodyFromRequest(request);
 
   if (!body) {

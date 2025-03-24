@@ -1,0 +1,36 @@
+meta {
+  name: measure-weight
+  type: http
+  seq: 2
+}
+
+post {
+  url: {{url}}/api/measure/weight
+  body: json
+  auth: apikey
+}
+
+auth:apikey {
+  key: api-key
+  value: secret
+  placement: header
+}
+
+body:json {
+  {
+    "values": [
+      {
+        "value": 123,
+        "measuredAt": "2023-10-05T14:48:00.000Z"
+      }, 
+      {
+        "value": 123,
+        "measuredAt": "2023-10-05T14:48:00.000Z"
+      }
+    ]
+  }
+}
+
+body:text {
+  test
+}

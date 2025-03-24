@@ -43,6 +43,7 @@ next-env.d.ts
 # package manager
 package-lock.json
 bun.lockb
+bun.lock
 
 # prisma
 prisma/db
