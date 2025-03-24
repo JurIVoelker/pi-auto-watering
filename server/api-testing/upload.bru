@@ -1,0 +1,31 @@
+meta {
+  name: upload
+  type: http
+  seq: 3
+}
+
+post {
+  url: {{url}}/api/upload
+  body: file
+  auth: apikey
+}
+
+headers {
+  x-filename: test123.jpg
+}
+
+auth:apikey {
+  key: api-key
+  value: secret
+  placement: header
+}
+
+body:json {
+  {
+    
+  }
+}
+
+body:file {
+  file: @file(C:\Users\juriv\Pictures\Screenshots\Screenshot 2025-03-19 222339.png) @contentType(image/png)
+}

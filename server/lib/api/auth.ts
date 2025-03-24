@@ -83,3 +83,16 @@ export const validateRequest = async (
 
   return { body, error: null };
 };
+
+export const UNAUTHORIZED_RESPONSE = new Response(
+  JSON.stringify({ error: getZodIssue("Unauthorized", ["header"]) }),
+  {
+    status: 401,
+  }
+);
+
+export const getIssueResponse = (error: string, path?: string[]) => {
+  return new Response(JSON.stringify({ error: [getZodIssue(error, path)] }), {
+    status: 400,
+  });
+};
