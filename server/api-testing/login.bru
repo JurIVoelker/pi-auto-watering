@@ -1,0 +1,21 @@
+meta {
+  name: login
+  type: http
+  seq: 4
+}
+
+post {
+  url: {{url}}/api/login
+  body: json
+  auth: inherit
+}
+
+headers {
+  : 
+}
+
+body:json {
+  {
+    "password": "{{secret}}w"
+  }
+}

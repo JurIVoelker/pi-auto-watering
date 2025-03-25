@@ -6,7 +6,7 @@ import {
   validateSchema,
 } from "./schemaUtils";
 
-type Permission = "user" | "server";
+type Permission = "user" | "server" | "public";
 
 export const hasServersidePermission = async (
   permissions: Permission[],
@@ -22,6 +22,7 @@ export const hasServersidePermission = async (
         return true;
       }
     }
+
     if (permission === "server") {
       const { headers } = request;
       const authHeader = headers.get("api-key");
@@ -30,6 +31,10 @@ export const hasServersidePermission = async (
       if (authHeader === SERVER_SECRET) {
         return true;
       }
+    }
+
+    if (permission === "public") {
+      return true;
     }
   }
   return false;
@@ -91,8 +96,12 @@ export const UNAUTHORIZED_RESPONSE = new Response(
   }
 );
 
-export const getIssueResponse = (error: string, path?: string[]) => {
+export const getIssueResponse = (
+  error: string,
+  path?: string[],
+  status?: number
+) => {
   return new Response(JSON.stringify({ error: [getZodIssue(error, path)] }), {
-    status: 400,
+    status: status || 400,
   });
 };
