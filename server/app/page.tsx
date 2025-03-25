@@ -1,6 +1,8 @@
 import { prisma } from "@/prisma/prisma";
 import Image from "next/image";
 
+export const revalidate = 1;
+
 export default async function Home() {
   const images = await prisma.image.findMany();
   return (
