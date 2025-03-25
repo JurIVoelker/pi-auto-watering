@@ -1,10 +1,15 @@
 "use client";
 
+import { WeighthMeasurement } from "@prisma/client";
 import GraphCard from "./graph-card";
 import GridCard from "./grid-card";
 import PlantCard from "./plant-card";
 
-const GridWrapper = () => {
+interface GridWrapperProps {
+  chartData: WeighthMeasurement[];
+}
+
+const GridWrapper: React.FC<GridWrapperProps> = ({ chartData }) => {
   return (
     <div className="grid grid-cols-1 gap-4 mt-6 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 pb-6">
       <GridCard content="1 Stunde" description="Letzte Gießung vor" />
@@ -19,7 +24,7 @@ const GridWrapper = () => {
         buttonLabel="Anpassen"
       />
       <PlantCard />
-      <GraphCard />
+      <GraphCard chartData={chartData} />
       <GridCard
         content="4.5L"
         description="Volumen Wassertank"
