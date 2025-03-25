@@ -48,3 +48,5 @@ bun.lock
 # prisma
 prisma/db
 prisma/migrations
+
+public/uploads

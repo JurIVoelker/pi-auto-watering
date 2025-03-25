@@ -8,6 +8,7 @@ import {
 } from "@/lib/api/auth";
 import { prisma } from "@/prisma/prisma";
 import { v6 } from "uuid";
+import sizeOf from "image-size";
 
 export async function POST(request: NextRequest): Promise<Response> {
   const hasPermission = await hasServersidePermission(["server"], request);
@@ -49,11 +50,20 @@ export async function POST(request: NextRequest): Promise<Response> {
   const arrayBuffer = await blob.arrayBuffer();
   const buffer = Buffer.from(arrayBuffer);
 
+  const dimensions = sizeOf(buffer);
+  const { width, height } = dimensions;
+
+  if (!width || !height) {
+    return getIssueResponse("Unable to determine image dimensions", ["file"]);
+  }
+
   const image = await prisma.image.create({
     data: {
       plantId: 1,
       capturedAt: capturedAtDate,
       url: publicFilePath,
+      width,
+      height,
     },
   });
 

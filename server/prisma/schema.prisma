@@ -27,6 +27,8 @@ model Image {
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
   capturedAt  DateTime
+  width       Int @default(0)
+  height      Int @default(0)
   plantId     Int
   plant       Plant    @relation(fields: [plantId], references: [id])
 }
