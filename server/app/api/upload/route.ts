@@ -29,8 +29,13 @@ export async function POST(request: NextRequest): Promise<Response> {
   }
 
   const fileName = v6() + ".jpg";
-  const filePath = path.join(process.cwd(), "public", "uploads", fileName);
+  const uploadsDir = path.join(process.cwd(), "public", "uploads");
+  const filePath = path.join(uploadsDir, fileName);
   const publicFilePath = "/uploads/" + fileName;
+
+  if (!fs.existsSync(uploadsDir)) {
+    fs.mkdirSync(uploadsDir, { recursive: true });
+  }
 
   if (fs.existsSync(filePath)) {
     return getIssueResponse("File already exists", ["file"]);
