@@ -1,3 +1,4 @@
+import { PLANT_ID } from "@/constants/constants";
 import { prisma } from "../prisma";
 
 const exec = async () => {
@@ -11,7 +12,7 @@ const exec = async () => {
     data: {
       name: "Default Plant",
       description: "This is the default plant",
-      id: 1,
+      id: PLANT_ID,
     },
   });
 

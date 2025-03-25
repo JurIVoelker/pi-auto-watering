@@ -1,3 +1,4 @@
+import { PLANT_ID } from "@/constants/constants";
 import { validateRequest } from "@/lib/api/auth";
 import { prisma } from "@/prisma/prisma";
 import { NextRequest } from "next/server";
@@ -36,6 +37,7 @@ export async function POST(req: NextRequest) {
     data: values.map((value) => ({
       weight: value.value,
       measuredAt: new Date(value.measuredAt),
+      plantId: PLANT_ID,
     })),
   });
 

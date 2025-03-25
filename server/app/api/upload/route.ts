@@ -9,6 +9,7 @@ import {
 import { prisma } from "@/prisma/prisma";
 import { v6 } from "uuid";
 import sizeOf from "image-size";
+import { PLANT_ID } from "@/constants/constants";
 
 export async function POST(request: NextRequest): Promise<Response> {
   const hasPermission = await hasServersidePermission(["server"], request);
@@ -64,7 +65,7 @@ export async function POST(request: NextRequest): Promise<Response> {
 
   const image = await prisma.image.create({
     data: {
-      plantId: 1,
+      plantId: PLANT_ID,
       capturedAt: capturedAtDate,
       url: publicFilePath,
       width,
