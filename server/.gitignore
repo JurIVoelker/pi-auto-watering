@@ -50,3 +50,6 @@ prisma/db
 prisma/migrations
 
 public/uploads
+
+
+api-testing/environments/production.bru
