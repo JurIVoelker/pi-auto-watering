@@ -17,4 +17,26 @@ model WeighthMeasurement {
   measuredAt  DateTime
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
+  plantId     Int @default(-1)
+  plant       Plant    @relation(fields: [plantId], references: [id])
+}
+
+model Image {
+  id          Int      @id @default(autoincrement())
+  url         String   @unique
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  capturedAt  DateTime
+  plantId     Int
+  plant       Plant    @relation(fields: [plantId], references: [id])
+}
+
+model Plant {
+  id          Int      @id @default(autoincrement())
+  name        String
+  description String
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  weight      WeighthMeasurement[]
+  images      Image[]
 }

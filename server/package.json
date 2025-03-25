@@ -8,7 +8,8 @@
     "start": "next start",
     "lint": "next lint",
     "db:migrate": "npx prisma migrate dev --name init",
-    "db:create": "npx tsx ./prisma/scripts/setupDatabase.ts && npm run db:migrate"
+    "db:create": "npx tsx ./prisma/scripts/setupDatabase.ts && npm run db:migrate",
+    "db:default-plant": "npx tsx ./prisma/scripts/setupDefaultPlant.ts"
   },
   "dependencies": {
     "@prisma/client": "6.5.0",
@@ -21,6 +22,7 @@
     "react-dom": "^19.0.0",
     "tailwind-merge": "^3.0.2",
     "tw-animate-css": "^1.2.4",
+    "uuid": "^11.1.0",
     "zod": "^3.24.2"
   },
   "devDependencies": {

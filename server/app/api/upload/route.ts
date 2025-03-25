@@ -6,6 +6,8 @@ import {
   hasServersidePermission,
   UNAUTHORIZED_RESPONSE,
 } from "@/lib/api/auth";
+import { prisma } from "@/prisma/prisma";
+import { v6 } from "uuid";
 
 export async function POST(request: NextRequest): Promise<Response> {
   const hasPermission = await hasServersidePermission(["server"], request);
@@ -13,28 +15,26 @@ export async function POST(request: NextRequest): Promise<Response> {
     return UNAUTHORIZED_RESPONSE;
   }
 
-  const fileName = request.headers.get("x-filename");
-  if (!fileName) {
-    return getIssueResponse("Filename is required in header X-Filename", [
+  const capturedAt = request.headers.get("x-captured-at");
+  if (!capturedAt) {
+    return getIssueResponse("capturedAt is required in header x-captured-at", [
       "header",
     ]);
   }
 
-  // Check if file is allowed
-  const allowedExtensions = ["png", "jpg", "jpeg", "gif"];
-  const extension = fileName.split(".").pop();
-  if (!allowedExtensions.includes(extension || "")) {
-    return getIssueResponse("File type not allowed", ["file"]);
+  const capturedAtDate = new Date(capturedAt);
+  if (isNaN(capturedAtDate.getTime())) {
+    return getIssueResponse("capturedAt is not a valid date", ["header"]);
   }
 
-  // Check if file already exists
-  const filePath = path.join(process.cwd(), "public", "uploads");
+  const fileName = v6() + ".jpg";
+  const filePath = path.join(process.cwd(), "public", "uploads", fileName);
+  const publicFilePath = "/uploads/" + fileName;
 
-  if (fs.existsSync(path.join(filePath, fileName))) {
+  if (fs.existsSync(filePath)) {
     return getIssueResponse("File already exists", ["file"]);
   }
 
-  // Get file from request
   let blob;
   try {
     blob = await request.blob();
@@ -46,13 +46,20 @@ export async function POST(request: NextRequest): Promise<Response> {
     return getIssueResponse("File type not allowed", ["file"]);
   }
 
-  // Save file
   const arrayBuffer = await blob.arrayBuffer();
   const buffer = Buffer.from(arrayBuffer);
 
-  fs.writeFileSync(filePath + "/" + fileName, buffer);
+  const image = await prisma.image.create({
+    data: {
+      plantId: 1,
+      capturedAt: capturedAtDate,
+      url: publicFilePath,
+    },
+  });
 
-  return new Response(JSON.stringify({ fileName }), {
+  fs.writeFileSync(filePath, buffer);
+
+  return new Response(JSON.stringify(image), {
     status: 200,
   });
 }
