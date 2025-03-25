@@ -15,6 +15,7 @@ import { useState } from "react";
 
 const LoginCard = () => {
   const [password, setPassword] = useState("");
+  const [isLoading, setLoading] = useState(false);
   const [error, setError] = useState("");
   const searchParams = useSearchParams();
   const redirect = searchParams.get("redirect");
@@ -22,6 +23,7 @@ const LoginCard = () => {
   const { push } = useRouter();
 
   const handleSubmit = async () => {
+    setLoading(true);
     const res = await postRequest("/api/login", { password });
     if (res.error) {
       setError(res.error[0].message);
@@ -34,6 +36,7 @@ const LoginCard = () => {
         push("/dashboard");
       }
     }
+    setLoading(false);
   };
 
   return (
@@ -63,11 +66,16 @@ const LoginCard = () => {
                 setPassword(e.target.value);
               }}
             />
-            {error && (
+            {!isLoading && error && (
               <span className="text-sm text-destructive mt-2">{error}</span>
             )}
           </div>
-          <Button type="submit" className="mt-4 w-full">
+          <Button
+            type="submit"
+            className="mt-4 w-full"
+            isLoading={isLoading}
+            disabled={isLoading || password === ""}
+          >
             Login
           </Button>
         </form>
