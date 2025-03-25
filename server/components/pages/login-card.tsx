@@ -40,7 +40,7 @@ const LoginCard = () => {
   };
 
   return (
-    <Card className="max-w-[400px] w-[calc(100%-2rem)] min-w-[200px]">
+    <Card className="max-w-md w-[calc(100%-2rem)] min-w-[200px]">
       <CardHeader>
         <CardTitle className="font-bold">Login</CardTitle>
         <CardDescription>
