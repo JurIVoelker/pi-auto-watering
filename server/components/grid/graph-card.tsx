@@ -31,7 +31,7 @@ const GraphCard: React.FC<GraphCardProps> = ({ chartData }) => {
       <CardContent className="flex justify-center items-center h-full">
         <ChartContainer
           config={chartConfig}
-          className="aspect-auto h-full w-full"
+          className="aspect-auto h-full w-full min-h-[300px]"
         >
           <AreaChart data={chartData}>
             <defs>

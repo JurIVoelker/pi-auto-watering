@@ -2,6 +2,8 @@ import Wrapper from "@/components/wrapper";
 import GridWrapper from "@/components/grid/grid-wrapper";
 import { prisma } from "@/prisma/prisma";
 
+export const revalidate = 1;
+
 const Dashboard = async () => {
   const weights = await prisma.weighthMeasurement.findMany({
     orderBy: {
