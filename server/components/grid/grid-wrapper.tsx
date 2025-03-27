@@ -19,7 +19,14 @@ const GridWrapper: React.FC<GridWrapperProps> = ({
   plant,
 }) => {
   const [volumeDialog, setVolumeDialog] = useState(false);
+  const [wateringDialog, setWateringDialog] = useState(false);
+
   const onSaveVolume = async (volume: number) => {
+    console.log(volume);
+    setVolumeDialog(false);
+  };
+
+  const onSaveWatering = async (volume: number) => {
     console.log(volume);
     setVolumeDialog(false);
   };
@@ -34,7 +41,7 @@ const GridWrapper: React.FC<GridWrapperProps> = ({
       <GridCard
         content="200ml"
         description="Gießvolumen"
-        onClick={() => setVolumeDialog(true)}
+        onClick={() => setWateringDialog(true)}
         buttonLabel="Anpassen"
       />
       <PlantCard latestImage={latestImage} plant={plant} />
@@ -42,7 +49,7 @@ const GridWrapper: React.FC<GridWrapperProps> = ({
       <GridCard
         content="4.5L"
         description="Volumen Wassertank"
-        onClick={() => {}}
+        onClick={() => setVolumeDialog(true)}
         buttonLabel="Ändern"
       />
       <GridCard
@@ -57,10 +64,18 @@ const GridWrapper: React.FC<GridWrapperProps> = ({
         className="sm:col-span-2 sm:row-start-6 md:row-start-auto col-span-1 md:col-span-3 lg:col-span-2"
       />
       <WateringVolumeDialog
-        defaultValue={500}
+        defaultValue={4500}
         open={volumeDialog}
         setOpen={setVolumeDialog}
         onSave={onSaveVolume}
+        desciption="Bitte geben Sie das neue Volumen des Wassertanks ein."
+        title="Wassertank Volumen"
+      />
+      <WateringVolumeDialog
+        defaultValue={500}
+        open={wateringDialog}
+        setOpen={setWateringDialog}
+        onSave={onSaveWatering}
       />
     </div>
   );

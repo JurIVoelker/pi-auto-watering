@@ -19,6 +19,8 @@ interface WateringVolumeDialogProps {
   onSave: (volume: number) => void;
   open: boolean;
   setOpen: (open: boolean) => void;
+  title?: string;
+  desciption?: string;
 }
 
 export default function WateringVolumeDialog({
@@ -26,6 +28,8 @@ export default function WateringVolumeDialog({
   open,
   setOpen,
   onSave,
+  title = "Menge anpassen",
+  desciption = "Passe die Bewässerungsmenge für deine Pflanzen an.",
 }: WateringVolumeDialogProps) {
   const [volume, setVolume] = useState(defaultValue); // Bewässerungsmenge in ml
 
@@ -44,9 +48,9 @@ export default function WateringVolumeDialog({
       <Dialog open={open} onOpenChange={setOpen}>
         <DialogContent className="sm:max-w-[425px]">
           <DialogHeader>
-            <DialogTitle>Menge anpassen</DialogTitle>
+            <DialogTitle>{title}</DialogTitle>
             <DialogDescription className="leading-5">
-              Passe die Bewässerungsmenge für deine Pflanzen an.
+              {desciption}
             </DialogDescription>
           </DialogHeader>
 
