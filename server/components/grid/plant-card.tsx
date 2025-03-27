@@ -21,10 +21,12 @@ const PlantCard: React.FC<PlantCardProps> = ({ latestImage, plant }) => {
     <Card
       className="md:col-start-3 md:row-start-1 md:row-span-3 
                  lg:row-start-1 lg:col-start-4 lg:row-span-3
-                 sm:row-span-2"
+                 sm:row-span-2 
+                 pt-0"
     >
       {latestImage && (
         <Image
+          className="rounded-t-lg"
           width={latestImage.width}
           height={latestImage.height}
           src={latestImage.url}
