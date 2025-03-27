@@ -19,7 +19,7 @@ const GridCard: React.FC<GridCardProps> = ({
 }) => {
   return (
     <Card className={className}>
-      <CardContent>
+      <CardContent className="flex flex-col items-center justify-center h-full">
         <p className="text-center text-muted-foreground text-sm">
           {description}
         </p>
