@@ -1,6 +1,12 @@
 "use client";
 import { Area, AreaChart, CartesianGrid, XAxis } from "recharts";
-import { Card, CardContent } from "../ui/card";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "../ui/card";
 import {
   ChartConfig,
   ChartContainer,
@@ -10,6 +16,14 @@ import {
   ChartTooltipContent,
 } from "../ui/chart";
 import { WeighthMeasurement } from "@prisma/client";
+import {
+  Select,
+  SelectContent,
+  SelectGroup,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "../ui/select";
 
 interface GraphCardProps {
   chartData: WeighthMeasurement[];
@@ -26,8 +40,41 @@ const GraphCard: React.FC<GraphCardProps> = ({ chartData }) => {
     },
   } satisfies ChartConfig;
 
+  const selectData: { value: string; label: string; isDisabled?: boolean }[] = [
+    { value: "today", label: "Heute" },
+    { value: "last-watering", label: "Letzte Gießung", isDisabled: true },
+    { value: "1-week", label: "1 Woche", isDisabled: true },
+    { value: "1-month", label: "1 Monat", isDisabled: true },
+    { value: "1-year", label: "1 Jahr", isDisabled: true },
+    { value: "max", label: "Max", isDisabled: true },
+  ];
+
   return (
     <Card className="col-start-1 row-start-2 lg:row-span-3 lg:col-span-2 md:col-start-1 md:row-start-2 md:row-span-2 md:col-span-2 sm:col-start-1 sm:row-start-2 sm:row-span-2 sm:col-span-2">
+      <CardHeader>
+        <CardTitle>Gewichtsverlauf</CardTitle>
+        <CardDescription className="flex items-baseline justify-between gap-8">
+          <p>Entwicklung des Gewichtes des Topfes</p>
+          <Select>
+            <SelectTrigger className="w-[180px]">
+              <SelectValue placeholder="Zeitraum wählen" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectGroup>
+                {selectData.map((item) => (
+                  <SelectItem
+                    key={item.value}
+                    value={item.value}
+                    disabled={item?.isDisabled}
+                  >
+                    {item.label}
+                  </SelectItem>
+                ))}
+              </SelectGroup>
+            </SelectContent>
+          </Select>
+        </CardDescription>
+      </CardHeader>
       <CardContent className="flex justify-center items-center h-full">
         <ChartContainer
           config={chartConfig}
