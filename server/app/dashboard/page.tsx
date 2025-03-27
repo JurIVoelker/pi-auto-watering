@@ -11,10 +11,22 @@ const Dashboard = async () => {
     },
   });
 
+  const latestImage = await prisma.image.findFirst({
+    orderBy: {
+      capturedAt: "desc",
+    },
+  });
+
+  const plant = await prisma.plant.findFirst();
+
   return (
     <Wrapper>
       <h3>Dashboard</h3>
-      <GridWrapper chartData={weights} />
+      <GridWrapper
+        chartData={weights}
+        latestImage={latestImage}
+        plant={plant}
+      />
     </Wrapper>
   );
 };
