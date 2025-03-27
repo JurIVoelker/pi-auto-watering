@@ -6,7 +6,7 @@ const ConnectionStatus = () => {
   // const lastConnection = new Date();
   const isConnected = true;
   return (
-    <div className=" rounded-md flex items-center gap-2">
+    <div className="bg-gray-50 px-4 py-2 rounded-md flex items-center justify-center gap-2">
       <p className="text-sm inline">Verbindung zum Server</p>
       {isConnected && <Ping isConnected={isConnected} />}
     </div>
