@@ -50,6 +50,7 @@ model Plant {
   createdAt       DateTime             @default(now())
   updatedAt       DateTime             @updatedAt
   nextWateringAt  DateTime             @default(now())
+  refillAt        DateTime             @default(now())
   lastPingAt      DateTime             @default(now())
   wateringAmount  Float                @default(0)
   waterTankVolume Float                @default(0)

@@ -1,0 +1,26 @@
+meta {
+  name: config
+  type: http
+  seq: 5
+}
+
+post {
+  url: {{url}}/api/config
+  body: json
+  auth: apikey
+}
+
+auth:apikey {
+  key: api-key
+  value: {{secret}}
+  placement: header
+}
+
+body:json {
+  {
+    "refillAt": "2025-04-06T15:34:44.491Z",
+    "wateringAmount": 500,
+    "waterTankVolume": 400,
+    "waterTankLevel": 3500
+  }
+}

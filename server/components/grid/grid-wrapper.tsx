@@ -49,6 +49,13 @@ const GridWrapper: React.FC<GridWrapperProps> = ({
       })
     : "Keine Daten verfügbar";
 
+  const refill = plant?.refillAt
+    ? formatDistanceToNow(new Date(plant.refillAt), {
+        addSuffix: true,
+        locale: de,
+      })
+    : "Keine Daten verfügbar";
+
   return (
     <div className="grid grid-cols-1 gap-4 mt-6 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 pb-6">
       <GridCard
@@ -71,7 +78,7 @@ const GridWrapper: React.FC<GridWrapperProps> = ({
         buttonLabel="Ändern"
       />
       <GridCard
-        content={`${plant?.waterTankLevel} ml`}
+        content={refill}
         description="Nachfüllen spätestens in"
         onClick={() => {}}
         buttonLabel="Jetzt Auffüllen"
@@ -90,7 +97,7 @@ const GridWrapper: React.FC<GridWrapperProps> = ({
         title="Wassertank Volumen"
       />
       <WateringVolumeDialog
-        defaultValue={plant?.waterTankLevel}
+        defaultValue={plant?.wateringAmount}
         open={wateringDialog}
         setOpen={setWateringDialog}
         onSave={onSaveWatering}
