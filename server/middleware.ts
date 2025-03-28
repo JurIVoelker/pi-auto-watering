@@ -5,10 +5,6 @@ import type { NextRequest } from "next/server";
 export function middleware(request: NextRequest) {
   const path = request.nextUrl.pathname;
 
-  if (path === "/") {
-    return NextResponse.redirect(new URL(`dashboard`, request.url));
-  }
-
   if (path === "/login") {
     return NextResponse.next();
   }
@@ -29,6 +25,10 @@ export function middleware(request: NextRequest) {
   response.cookies.set("password", "", {
     expires: new Date(0),
   });
+
+  if (path === "/") {
+    return NextResponse.redirect(new URL(`dashboard`, request.url));
+  }
 
   return response;
 }

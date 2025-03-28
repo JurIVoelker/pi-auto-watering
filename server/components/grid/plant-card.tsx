@@ -38,7 +38,7 @@ const PlantCard: React.FC<PlantCardProps> = ({ latestImage, plant }) => {
         <CardDescription>{plant?.description}</CardDescription>
       </CardHeader>
       <CardContent className="space-y-2">
-        <ConnectionStatus />
+        <ConnectionStatus lastPing={plant?.lastPingAt} />
         <Button className="w-full">Mehr Fotos</Button>
       </CardContent>
     </Card>

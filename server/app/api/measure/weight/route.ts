@@ -1,4 +1,5 @@
 import { PLANT_ID } from "@/constants/constants";
+import { updateLatestPing } from "@/lib/api/apiUtils";
 import { validateRequest } from "@/lib/api/auth";
 import { prisma } from "@/prisma/prisma";
 import { NextRequest } from "next/server";
@@ -40,6 +41,8 @@ export async function POST(req: NextRequest) {
       plantId: PLANT_ID,
     })),
   });
+
+  await updateLatestPing();
 
   return new Response(JSON.stringify({ ...measurement }), {
     status: 200,

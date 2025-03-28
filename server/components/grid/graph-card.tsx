@@ -54,7 +54,11 @@ const GraphCard: React.FC<GraphCardProps> = ({ chartData }) => {
       <CardHeader>
         <CardTitle>Gewichtsverlauf</CardTitle>
         <CardDescription className="flex items-baseline justify-between gap-8">
-          <p>Entwicklung des Gewichtes des Topfes</p>
+          {!chartData.length ? (
+            <p>Keine Daten für diesen Zeitraum vorhanden</p>
+          ) : (
+            <p>Entwicklung des Gewichtes des Topfes</p>
+          )}
           <Select>
             <SelectTrigger className="w-[180px]">
               <SelectValue placeholder="Zeitraum wählen" />
