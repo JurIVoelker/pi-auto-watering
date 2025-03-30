@@ -34,7 +34,7 @@ export async function POST(req: NextRequest) {
 
   const { values } = body as POST_MEASURE_WEIGHT_TYPE;
 
-  const measurement = await prisma.weighthMeasurement.createManyAndReturn({
+  const measurement = await prisma.weightMeasurement.createManyAndReturn({
     data: values.map((value) => ({
       weight: value.value,
       measuredAt: new Date(value.measuredAt),

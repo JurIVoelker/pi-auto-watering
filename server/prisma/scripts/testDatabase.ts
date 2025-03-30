@@ -6,6 +6,11 @@ const exec = async () => {
       plantId: 1,
     },
   });
+  await prisma.weightMeasurement.deleteMany({
+    where: {
+      plantId: 1,
+    },
+  });
 };
 
 exec();

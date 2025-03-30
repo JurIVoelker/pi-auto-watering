@@ -45,8 +45,8 @@ const exec = async () => {
   const startDate = subDays(new Date(), days - 1);
   const { values, waterings } = generateValues(startDate, days);
 
-  await prisma.weighthMeasurement.deleteMany({});
-  await prisma.weighthMeasurement.createMany({
+  await prisma.weightMeasurement.deleteMany({});
+  await prisma.weightMeasurement.createMany({
     data: values.map((value) => ({
       weight: value.value,
       measuredAt: new Date(value.measuredAt),

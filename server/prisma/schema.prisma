@@ -11,7 +11,7 @@ datasource db {
   url      = "file:./db/database.db"
 }
 
-model WeighthMeasurement {
+model WeightMeasurement {
   id         Int      @id @default(autoincrement())
   weight     Float
   measuredAt DateTime
@@ -44,18 +44,18 @@ model Watering {
 }
 
 model Plant {
-  id              Int                  @id @default(autoincrement())
+  id              Int                 @id @default(autoincrement())
   name            String
   description     String
-  createdAt       DateTime             @default(now())
-  updatedAt       DateTime             @updatedAt
-  nextWateringAt  DateTime             @default(now())
-  refillAt        DateTime             @default(now())
-  lastPingAt      DateTime             @default(now())
-  wateringAmount  Float                @default(0)
-  waterTankVolume Float                @default(0)
-  waterTankLevel  Float                @default(0)
-  weight          WeighthMeasurement[]
+  createdAt       DateTime            @default(now())
+  updatedAt       DateTime            @updatedAt
+  nextWateringAt  DateTime            @default(now())
+  refillAt        DateTime            @default(now())
+  lastPingAt      DateTime            @default(now())
+  wateringAmount  Float               @default(0)
+  waterTankVolume Float               @default(0)
+  waterTankLevel  Float               @default(0)
+  weight          WeightMeasurement[]
   images          Image[]
   watering        Watering[]
 }

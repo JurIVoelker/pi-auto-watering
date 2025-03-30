@@ -7,7 +7,7 @@ import { getChartData } from "@/lib/utils";
 export const revalidate = 1;
 
 const Dashboard = async () => {
-  const allWeights = await prisma.weighthMeasurement.findMany({});
+  const allWeights = await prisma.weightMeasurement.findMany({});
 
   const allWaterings = await prisma.watering.findMany({
     where: {

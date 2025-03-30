@@ -1,5 +1,5 @@
 import { filterTypes as filterType } from "@/components/grid/graph-card";
-import { Watering, WeighthMeasurement } from "@prisma/client";
+import { Watering, WeightMeasurement } from "@prisma/client";
 import { clsx, type ClassValue } from "clsx";
 import { startOfDay, subDays } from "date-fns";
 import { twMerge } from "tailwind-merge";
@@ -8,12 +8,12 @@ export function cn(...inputs: ClassValue[]) {
 }
 
 export const limitWeightsToLength = (
-  weights: WeighthMeasurement[],
+  weights: WeightMeasurement[],
   count = 50
 ) => {
   const mergeCount = Math.ceil(weights.length / count);
   if (mergeCount <= 1) return weights;
-  const mergedWeights: WeighthMeasurement[] = [];
+  const mergedWeights: WeightMeasurement[] = [];
   let avg = 0;
   let resetIndex = mergeCount;
   weights.forEach((m, index) => {
@@ -30,7 +30,7 @@ export const limitWeightsToLength = (
 export type ChartData = { weight: number; watering: number; date: Date }[];
 
 export const getChartData = (
-  weights: WeighthMeasurement[],
+  weights: WeightMeasurement[],
   filterType: filterType,
   waterings: Watering[]
 ): ChartData => {
@@ -62,7 +62,7 @@ export const getChartData = (
   return combinedData;
 };
 
-const combineData = (weights: WeighthMeasurement[], waterings: Watering[]) => {
+const combineData = (weights: WeightMeasurement[], waterings: Watering[]) => {
   const combinedData: ChartData = weights.map((m) => ({
     watering: 0,
     weight: m.weight,

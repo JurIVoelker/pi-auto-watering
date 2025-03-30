@@ -81,8 +81,6 @@ const GraphCard: React.FC<GraphCardProps> = ({
     { value: "max", label: "Max" },
   ];
 
-  const [filter, setFilter] = useState<filterTypes>("last-watering");
-
   const chartDataMap = {
     today: chartDataToday,
     "1-week": chartDataWeek,
@@ -91,6 +89,12 @@ const GraphCard: React.FC<GraphCardProps> = ({
     max: chartDataMax,
     "last-watering": chartDataLastWatering,
   };
+
+  const [filter, setFilter] = useState<filterTypes>(
+    selectData.find((s) => s.value === "last-watering")?.isDisabled
+      ? "today"
+      : "last-watering"
+  );
 
   const chartData = chartDataMap[filter] ?? chartDataToday;
 
