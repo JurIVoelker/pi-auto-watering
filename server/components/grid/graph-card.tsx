@@ -37,6 +37,8 @@ interface GraphCardProps {
   lastWaterings: Watering[];
 }
 
+import { format } from "date-fns";
+
 export type filterTypes =
   | "today"
   | "last-watering"
@@ -95,6 +97,16 @@ const GraphCard: React.FC<GraphCardProps> = ({
       ? "today"
       : "last-watering"
   );
+  const formatMap = {
+    today: (date: Date) => format(date, "hh:mm"),
+    "1-week": (date: Date) => format(date, "dd.MM hh:mm") + " Uhr",
+    "1-month": (date: Date) => format(date, "dd.MM"),
+    "1-year": (date: Date) => format(date, "MM.yyyy"),
+    "last-watering": (date: Date) => format(date, "dd.MM, hh:mm") + " Uhr",
+    max: (date: Date) => format(date, "MM.yyyy"),
+  };
+
+  const currentFormatter = formatMap[filter] ?? "dd:MM.yyyy";
 
   const chartData = chartDataMap[filter] ?? chartDataToday;
 
@@ -160,25 +172,13 @@ const GraphCard: React.FC<GraphCardProps> = ({
               minTickGap={32}
               tickFormatter={(value) => {
                 const date = new Date(value);
-                return date.toLocaleDateString("de-DE", {
-                  day: "2-digit",
-                  month: "2-digit",
-                  hour: "2-digit",
-                });
+                return currentFormatter(date);
               }}
             />
             <ChartTooltip
               cursor={false}
               labelFormatter={(_, payload) => {
-                const date = payload[0].payload.date.toLocaleDateString(
-                  "de-DE",
-                  {
-                    day: "2-digit",
-                    month: "2-digit",
-                    hour: "2-digit",
-                    minute: "2-digit",
-                  }
-                );
+                const date = currentFormatter(payload[0].payload.date);
                 return date;
               }}
               content={<ChartTooltipContent indicator="line" />}
