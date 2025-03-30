@@ -1,10 +1,10 @@
 import Wrapper from "@/components/wrapper";
 import GridWrapper from "@/components/grid/grid-wrapper";
 import { prisma } from "@/prisma/prisma";
-import { PLANT_ID } from "@/constants/constants";
+import { PLANT_ID, SYNC_INTERVAL_SECONDS } from "@/constants/constants";
 import { getChartData } from "@/lib/utils";
 
-export const revalidate = 30;
+export const revalidate = SYNC_INTERVAL_SECONDS;
 
 const Dashboard = async () => {
   const allWeights = await prisma.weightMeasurement.findMany({});
