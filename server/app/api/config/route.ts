@@ -1,6 +1,7 @@
 import { PLANT_ID } from "@/constants/constants";
 import { validateRequest } from "@/lib/api/auth";
 import { prisma } from "@/prisma/prisma";
+import { revalidatePath } from "next/cache";
 import { NextRequest, NextResponse } from "next/server";
 import { z } from "zod";
 
@@ -24,8 +25,9 @@ export async function POST(req: NextRequest) {
   );
 
   if (error) {
+    const status = error[0].message === "Unauthorized" ? 401 : 400;
     return new Response(JSON.stringify({ error }), {
-      status: 400,
+      status,
     });
   }
 
@@ -53,6 +55,8 @@ export async function POST(req: NextRequest) {
       refillAt,
     },
   });
+
+  revalidatePath("/dashboard");
 
   return NextResponse.json(res);
 }

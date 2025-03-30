@@ -9,6 +9,8 @@ import { formatDistanceToNow } from "date-fns";
 import { de } from "date-fns/locale";
 import GraphCard from "./graph-card";
 import { ChartData } from "@/lib/utils";
+import { postRequest } from "@/lib/api/requestUtils";
+import { useRouter } from "next/navigation";
 
 interface GridWrapperProps {
   latestImage: Image | null;
@@ -36,13 +38,29 @@ const GridWrapper: React.FC<GridWrapperProps> = ({
   const [volumeDialog, setVolumeDialog] = useState(false);
   const [wateringDialog, setWateringDialog] = useState(false);
 
+  const { refresh } = useRouter();
+
   const onSaveVolume = async (volume: number) => {
-    console.log(volume);
+    const res = await postRequest("/api/config", {
+      waterTankVolume: volume,
+    });
+    if (res?.error) {
+      console.error(res.error);
+      return;
+    }
+    refresh();
     setVolumeDialog(false);
   };
 
-  const onSaveWatering = async (volume: number) => {
-    console.log(volume);
+  const onSaveWatering = async (amount: number) => {
+    const res = await postRequest("/api/config", {
+      wateringAmount: amount,
+    });
+    if (res?.error) {
+      console.error(res.error);
+      return;
+    }
+    refresh();
     setVolumeDialog(false);
   };
 
