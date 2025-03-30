@@ -134,12 +134,14 @@ const GridWrapper: React.FC<GridWrapperProps> = ({
         onSave={onSaveVolume}
         desciption="Bitte geben Sie das neue Volumen des Wassertanks ein."
         title="Wassertank Volumen"
+        steps={[20, 50, 250]}
       />
       <WateringVolumeDialog
         defaultValue={plant?.wateringAmount}
         open={wateringDialog}
         setOpen={setWateringDialog}
         onSave={onSaveWatering}
+        steps={[10, 50, 250]}
       />
     </div>
   );

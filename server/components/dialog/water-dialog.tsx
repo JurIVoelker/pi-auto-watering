@@ -2,7 +2,7 @@
 
 import type React from "react";
 
-import { useState } from "react";
+import { Fragment, useState } from "react";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -21,6 +21,7 @@ interface WateringVolumeDialogProps {
   setOpen: (open: boolean) => void;
   title?: string;
   desciption?: string;
+  steps?: number[]; // Array of step values for buttons
 }
 
 export default function WateringVolumeDialog({
@@ -30,6 +31,7 @@ export default function WateringVolumeDialog({
   onSave,
   title = "Menge anpassen",
   desciption = "Passe die Bewässerungsmenge für deine Pflanzen an.",
+  steps = [20, 100], // Default steps
 }: WateringVolumeDialogProps) {
   const [volume, setVolume] = useState(defaultValue); // Bewässerungsmenge in ml
 
@@ -43,9 +45,16 @@ export default function WateringVolumeDialog({
     setOpen(false);
   };
 
+  const onOpenChange = (open: boolean) => {
+    if (!open) {
+      setVolume(defaultValue); // Reset to default value when closing
+    }
+    setOpen(open);
+  };
+
   return (
     <>
-      <Dialog open={open} onOpenChange={setOpen}>
+      <Dialog open={open} onOpenChange={onOpenChange}>
         <DialogContent className="sm:max-w-[425px]">
           <DialogHeader>
             <DialogTitle>{title}</DialogTitle>
@@ -61,38 +70,26 @@ export default function WateringVolumeDialog({
 
             <div>
               <div className="grid grid-cols-2 gap-2 pb-2">
-                <Button
-                  variant="outline"
-                  onClick={() => adjustVolume(-50)}
-                  className="flex items-center justify-center"
-                >
-                  <MinusIcon className="h-4 w-4 mr-1" />
-                  50ml
-                </Button>
-                <Button
-                  variant="outline"
-                  onClick={() => adjustVolume(50)}
-                  className="flex items-center justify-center"
-                >
-                  <PlusIcon className="h-4 w-4 mr-1" />
-                  50ml
-                </Button>
-                <Button
-                  variant="outline"
-                  onClick={() => adjustVolume(-250)}
-                  className="flex items-center justify-center"
-                >
-                  <MinusIcon className="h-4 w-4 mr-1" />
-                  250ml
-                </Button>
-                <Button
-                  variant="outline"
-                  onClick={() => adjustVolume(250)}
-                  className="flex items-center justify-center"
-                >
-                  <PlusIcon className="h-4 w-4 mr-1" />
-                  250ml
-                </Button>
+                {steps.map((step) => (
+                  <Fragment key={step}>
+                    <Button
+                      variant="outline"
+                      onClick={() => adjustVolume(-step)}
+                      className="flex items-center justify-center"
+                    >
+                      <MinusIcon className="h-4 w-4 mr-1" />
+                      {step}ml
+                    </Button>
+                    <Button
+                      variant="outline"
+                      onClick={() => adjustVolume(step)}
+                      className="flex items-center justify-center"
+                    >
+                      <PlusIcon className="h-4 w-4 mr-1" />
+                      {step}ml
+                    </Button>
+                  </Fragment>
+                ))}
               </div>
             </div>
           </div>
