@@ -111,7 +111,7 @@ const GraphCard: React.FC<GraphCardProps> = ({
   const chartData = chartDataMap[filter] ?? chartDataToday;
 
   return (
-    <Card className="col-start-1 row-start-2 lg:row-span-3 lg:col-span-2 md:col-start-1 md:row-start-2 md:row-span-2 md:col-span-2 sm:col-start-1 sm:row-start-2 sm:row-span-2 sm:col-span-2">
+    <Card className="col-start-1 lg:row-span-3 lg:col-span-2 md:col-start-1 md:row-start-2 md:row-span-2 md:col-span-2 sm:col-start-1 sm:row-start-2 sm:row-span-2 sm:col-span-2 row-start-4 lg:row-start-2">
       <CardHeader>
         <CardTitle>Gewichtsverlauf</CardTitle>
         <CardDescription className="flex items-baseline justify-between gap-8">

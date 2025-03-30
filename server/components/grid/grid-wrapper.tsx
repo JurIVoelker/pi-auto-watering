@@ -92,13 +92,19 @@ const GridWrapper: React.FC<GridWrapperProps> = ({
       <GridCard
         content={timeSinceLastWatering}
         description="Letzte Gießung vor"
+        className="row-start-2 sm:row-start-1"
       />
-      <GridCard content={nextWatering} description="Nächste Gießung in" />
+      <GridCard
+        content={nextWatering}
+        description="Nächste Gießung in"
+        className="row-start-3 sm:row-start-1"
+      />
       <GridCard
         content={`${plant?.wateringAmount} ml`}
         description="Gießvolumen"
         onClick={() => setWateringDialog(true)}
         buttonLabel="Anpassen"
+        className="row-start-5 sm:row-start-4 lg:row-start-1"
       />
       <PlantCard latestImage={latestImage} plant={plant} />
       <GraphCard
@@ -115,17 +121,19 @@ const GridWrapper: React.FC<GridWrapperProps> = ({
         description="Volumen Wassertank"
         onClick={() => setVolumeDialog(true)}
         buttonLabel="Ändern"
+        className="row-start-6 sm:row-start-5 md:row-start-4 lg:row-start-2"
       />
       <GridCard
         content={refill}
         description="Nachfüllen spätestens in"
         onClick={() => {}}
         buttonLabel="Jetzt Auffüllen"
+        className="row-start-7 md:row-start-4 lg:row-start-3"
       />
       <GridCard
         content="TODO"
         description="TODO"
-        className="sm:col-span-2 sm:row-start-6 md:row-start-auto col-span-1 md:col-span-3 lg:col-span-2"
+        className="sm:col-span-2 sm:row-start-6 md:row-start-auto col-span-1 md:col-span-3 lg:col-span-2 row-start-8"
       />
       <WateringVolumeDialog
         defaultValue={plant?.waterTankVolume}
