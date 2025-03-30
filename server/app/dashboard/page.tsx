@@ -4,7 +4,7 @@ import { prisma } from "@/prisma/prisma";
 import { PLANT_ID } from "@/constants/constants";
 import { getChartData } from "@/lib/utils";
 
-export const revalidate = 1;
+export const revalidate = 30;
 
 const Dashboard = async () => {
   const allWeights = await prisma.weightMeasurement.findMany({});
