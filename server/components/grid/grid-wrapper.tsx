@@ -1,26 +1,37 @@
 "use client";
 
-import { Image, Plant, Watering, WeighthMeasurement } from "@prisma/client";
-import GraphCard from "./graph-card";
+import { Image, Plant, Watering } from "@prisma/client";
 import GridCard from "./grid-card";
 import PlantCard from "./plant-card";
 import { useState } from "react";
 import WateringVolumeDialog from "../dialog/water-dialog";
 import { formatDistanceToNow } from "date-fns";
 import { de } from "date-fns/locale";
+import GraphCard from "./graph-card";
+import { ChartData } from "@/lib/utils";
 
 interface GridWrapperProps {
-  chartData: WeighthMeasurement[];
   latestImage: Image | null;
   plant: Plant | null;
-  lastWatering: Watering | null;
+  lastWaterings: Watering[];
+  chartDataToday: ChartData;
+  chartDataLastWatering?: ChartData;
+  chartDataWeek?: ChartData;
+  chartDataMonth?: ChartData;
+  chartDataYear?: ChartData;
+  chartDataMax?: ChartData;
 }
 
 const GridWrapper: React.FC<GridWrapperProps> = ({
-  chartData,
+  chartDataToday,
+  chartDataLastWatering,
+  chartDataWeek,
+  chartDataMonth,
+  chartDataYear,
+  chartDataMax,
   latestImage,
   plant,
-  lastWatering,
+  lastWaterings,
 }) => {
   const [volumeDialog, setVolumeDialog] = useState(false);
   const [wateringDialog, setWateringDialog] = useState(false);
@@ -34,6 +45,8 @@ const GridWrapper: React.FC<GridWrapperProps> = ({
     console.log(volume);
     setVolumeDialog(false);
   };
+
+  const lastWatering = lastWaterings[0] ?? null;
 
   const timeSinceLastWatering = lastWatering
     ? formatDistanceToNow(new Date(lastWatering.wateredAt), {
@@ -70,7 +83,15 @@ const GridWrapper: React.FC<GridWrapperProps> = ({
         buttonLabel="Anpassen"
       />
       <PlantCard latestImage={latestImage} plant={plant} />
-      <GraphCard chartData={chartData} />
+      <GraphCard
+        chartDataToday={chartDataToday}
+        chartDataLastWatering={chartDataLastWatering}
+        chartDataWeek={chartDataWeek}
+        chartDataMonth={chartDataMonth}
+        chartDataYear={chartDataYear}
+        chartDataMax={chartDataMax}
+        lastWaterings={lastWaterings}
+      />
       <GridCard
         content={`${plant?.waterTankVolume} ml`}
         description="Volumen Wassertank"

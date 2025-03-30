@@ -10,6 +10,7 @@
     "db:migrate": "npx prisma migrate dev --name init",
     "db:create": "npx tsx ./prisma/scripts/setupDatabase.ts && npm run db:migrate",
     "db:default-plant": "npx tsx ./prisma/scripts/setupDefaultPlant.ts",
+    "db:test-data": "npx tsx ./prisma/scripts/addTestData.ts",
     "db:test": "npx tsx ./prisma/scripts/testDatabase.ts"
   },
   "dependencies": {

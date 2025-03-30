@@ -5,13 +5,13 @@ import { NextRequest, NextResponse } from "next/server";
 import { z } from "zod";
 
 const CONFIG_SCHEMA = z.object({
-  nextWateringAt: z.string().optional(),
+  nextWateringAt: z.string().datetime().optional(),
   wateringAmount: z.number().optional(),
   waterTankVolume: z.number().optional(),
   waterTankLevel: z.number().optional(),
   name: z.string().optional(),
   description: z.string().optional(),
-  refillAt: z.string().optional(),
+  refillAt: z.string().datetime().optional(),
 });
 
 export type CONFIG_TYPE = z.infer<typeof CONFIG_SCHEMA>;

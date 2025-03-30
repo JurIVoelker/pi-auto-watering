@@ -2,15 +2,32 @@ import Wrapper from "@/components/wrapper";
 import GridWrapper from "@/components/grid/grid-wrapper";
 import { prisma } from "@/prisma/prisma";
 import { PLANT_ID } from "@/constants/constants";
+import { getChartData } from "@/lib/utils";
 
 export const revalidate = 1;
 
 const Dashboard = async () => {
-  const weights = await prisma.weighthMeasurement.findMany({
+  const allWeights = await prisma.weighthMeasurement.findMany({});
+
+  const allWaterings = await prisma.watering.findMany({
+    where: {
+      plantId: PLANT_ID,
+    },
     orderBy: {
-      measuredAt: "asc",
+      wateredAt: "desc",
     },
   });
+
+  const chartDataToday = getChartData(allWeights, "today", allWaterings);
+  const chartDataLastWatering = getChartData(
+    allWeights,
+    "last-watering",
+    allWaterings
+  );
+  const chartDataWeek = getChartData(allWeights, "1-week", allWaterings);
+  const chartDataMonth = getChartData(allWeights, "1-month", allWaterings);
+  const chartDataYear = getChartData(allWeights, "1-year", allWaterings);
+  const chartDataMax = getChartData(allWeights, "max", allWaterings);
 
   const latestImage = await prisma.image.findFirst({
     orderBy: {
@@ -24,23 +41,19 @@ const Dashboard = async () => {
     },
   });
 
-  const lastWatering = await prisma.watering.findFirst({
-    where: {
-      plantId: PLANT_ID,
-    },
-    orderBy: {
-      wateredAt: "desc",
-    },
-  });
-
   return (
     <Wrapper>
       <h3>Dashboard</h3>
       <GridWrapper
-        chartData={weights}
+        chartDataToday={chartDataToday}
+        chartDataLastWatering={chartDataLastWatering}
+        chartDataWeek={chartDataWeek}
+        chartDataMonth={chartDataMonth}
+        chartDataYear={chartDataYear}
+        chartDataMax={chartDataMax}
         latestImage={latestImage}
         plant={plant}
-        lastWatering={lastWatering}
+        lastWaterings={allWaterings}
       />
     </Wrapper>
   );
