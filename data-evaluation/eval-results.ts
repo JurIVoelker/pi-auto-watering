@@ -2,7 +2,7 @@ import * as path from "path";
 import * as fs from "fs";
 import { generateBarChart, generateLineChart } from "./chart";
 
-const subfolder = "constant weight";
+const subfolder = "fixed-sensor";
 const dirPath = path.join(__dirname, `./data`);
 
 const filenames = fs.readdirSync(`${dirPath}/${subfolder}`);
@@ -52,8 +52,8 @@ const divisionCount = 500;
 //   (acc, curr) => (curr.value < acc ? curr.value : acc),
 //   Infinity
 // );
-const min = 320000;
-const max = 400000;
+const min = 570000;
+const max = 750000;
 
 const step = (max - min) / divisionCount;
 const histogram = Array.from({ length: divisionCount }, (_, i) => {
