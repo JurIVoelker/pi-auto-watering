@@ -11,34 +11,51 @@ datasource db {
   url      = "file:./db/database.db"
 }
 
-model WeighthMeasurement {
-  id          Int      @id @default(autoincrement())
-  weight      Float
-  measuredAt  DateTime
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
-  plantId     Int @default(-1)
-  plant       Plant    @relation(fields: [plantId], references: [id])
+model WeightMeasurement {
+  id         Int      @id @default(autoincrement())
+  weight     Float
+  measuredAt DateTime
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+  plantId    Int      @default(-1)
+  plant      Plant    @relation(fields: [plantId], references: [id])
 }
 
 model Image {
-  id          Int      @id @default(autoincrement())
-  url         String   @unique
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
-  capturedAt  DateTime
-  width       Int @default(0)
-  height      Int @default(0)
-  plantId     Int
-  plant       Plant    @relation(fields: [plantId], references: [id])
+  id         Int      @id @default(autoincrement())
+  url        String   @unique
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+  capturedAt DateTime
+  width      Int      @default(0)
+  height     Int      @default(0)
+  plantId    Int
+  plant      Plant    @relation(fields: [plantId], references: [id])
+}
+
+model Watering {
+  id        Int      @id @default(autoincrement())
+  amount    Float
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  wateredAt DateTime
+  plantId   Int
+  plant     Plant    @relation(fields: [plantId], references: [id])
 }
 
 model Plant {
-  id          Int      @id @default(autoincrement())
-  name        String
-  description String
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
-  weight      WeighthMeasurement[]
-  images      Image[]
+  id              Int                 @id @default(autoincrement())
+  name            String
+  description     String
+  createdAt       DateTime            @default(now())
+  updatedAt       DateTime            @updatedAt
+  nextWateringAt  DateTime            @default(now())
+  refillAt        DateTime            @default(now())
+  lastPingAt      DateTime            @default(now())
+  wateringAmount  Float               @default(0)
+  waterTankVolume Float               @default(0)
+  waterTankLevel  Float               @default(0)
+  weight          WeightMeasurement[]
+  images          Image[]
+  watering        Watering[]
 }

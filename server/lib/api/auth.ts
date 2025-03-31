@@ -14,11 +14,13 @@ export const hasServersidePermission = async (
 ) => {
   for (const permission of permissions) {
     if (permission === "user") {
-      const { headers } = request;
+      const { headers, cookies } = request;
       const authHeader = headers.get("api-key");
+      const password = cookies.get("password");
+
       const { USER_SECRET } = process.env;
       if (!USER_SECRET) console.error("USER_SECRET not set");
-      if (authHeader === USER_SECRET) {
+      if (authHeader === USER_SECRET || password?.value === USER_SECRET) {
         return true;
       }
     }

@@ -1,0 +1,24 @@
+meta {
+  name: watering
+  type: http
+  seq: 6
+}
+
+post {
+  url: {{url}}/api/watering
+  body: json
+  auth: apikey
+}
+
+auth:apikey {
+  key: api-key
+  value: {{secret}}
+  placement: header
+}
+
+body:json {
+  {
+    "wateredAt": "2025-10-01T12:50:00.000Z",
+    "amount": 123
+  }
+}

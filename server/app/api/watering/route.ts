@@ -5,24 +5,18 @@ import { prisma } from "@/prisma/prisma";
 import { NextRequest } from "next/server";
 import { z } from "zod";
 
-const POST_MEASURE_WEIGHT_SCHEMA = z.object({
-  values: z.array(
-    z.object({
-      value: z.number(),
-      measuredAt: z.string().datetime(),
-    })
-  ),
+const POST_WATER_SCHEMA = z.object({
+  wateredAt: z.string().datetime(),
+  amount: z.number().min(0),
 });
 
-export type POST_MEASURE_WEIGHT_TYPE = z.infer<
-  typeof POST_MEASURE_WEIGHT_SCHEMA
->;
+export type POST_WATER_TYPE = z.infer<typeof POST_WATER_SCHEMA>;
 
 export async function POST(req: NextRequest) {
   const { body, error } = await validateRequest(
     req,
     ["server"],
-    POST_MEASURE_WEIGHT_SCHEMA
+    POST_WATER_SCHEMA
   );
 
   if (error) {
@@ -32,19 +26,19 @@ export async function POST(req: NextRequest) {
     });
   }
 
-  const { values } = body as POST_MEASURE_WEIGHT_TYPE;
+  const { amount, wateredAt } = body as POST_WATER_TYPE;
 
-  const measurement = await prisma.weightMeasurement.createManyAndReturn({
-    data: values.map((value) => ({
-      weight: value.value,
-      measuredAt: new Date(value.measuredAt),
+  const watering = await prisma.watering.create({
+    data: {
+      amount,
+      wateredAt: new Date(wateredAt),
       plantId: PLANT_ID,
-    })),
+    },
   });
 
   await updateLatestPing();
 
-  return new Response(JSON.stringify({ ...measurement }), {
+  return new Response(JSON.stringify({ ...watering }), {
     status: 200,
   });
 }

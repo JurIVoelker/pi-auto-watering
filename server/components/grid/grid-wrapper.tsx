@@ -1,81 +1,155 @@
 "use client";
 
-import { Image, Plant, WeighthMeasurement } from "@prisma/client";
-import GraphCard from "./graph-card";
+import { Image, Plant, Watering } from "@prisma/client";
 import GridCard from "./grid-card";
 import PlantCard from "./plant-card";
 import { useState } from "react";
 import WateringVolumeDialog from "../dialog/water-dialog";
+import { formatDistanceToNow } from "date-fns";
+import { de } from "date-fns/locale";
+import GraphCard from "./graph-card";
+import { ChartData } from "@/lib/utils";
+import { postRequest } from "@/lib/api/requestUtils";
+import { useRouter } from "next/navigation";
 
 interface GridWrapperProps {
-  chartData: WeighthMeasurement[];
   latestImage: Image | null;
   plant: Plant | null;
+  lastWaterings: Watering[];
+  chartDataToday: ChartData;
+  chartDataLastWatering?: ChartData;
+  chartDataWeek?: ChartData;
+  chartDataMonth?: ChartData;
+  chartDataYear?: ChartData;
+  chartDataMax?: ChartData;
 }
 
 const GridWrapper: React.FC<GridWrapperProps> = ({
-  chartData,
+  chartDataToday,
+  chartDataLastWatering,
+  chartDataWeek,
+  chartDataMonth,
+  chartDataYear,
+  chartDataMax,
   latestImage,
   plant,
+  lastWaterings,
 }) => {
   const [volumeDialog, setVolumeDialog] = useState(false);
   const [wateringDialog, setWateringDialog] = useState(false);
 
+  const { refresh } = useRouter();
+
   const onSaveVolume = async (volume: number) => {
-    console.log(volume);
+    const res = await postRequest("/api/config", {
+      waterTankVolume: volume,
+    });
+    if (res?.error) {
+      console.error(res.error);
+      return;
+    }
+    refresh();
     setVolumeDialog(false);
   };
 
-  const onSaveWatering = async (volume: number) => {
-    console.log(volume);
+  const onSaveWatering = async (amount: number) => {
+    const res = await postRequest("/api/config", {
+      wateringAmount: amount,
+    });
+    if (res?.error) {
+      console.error(res.error);
+      return;
+    }
+    refresh();
     setVolumeDialog(false);
   };
+
+  const lastWatering = lastWaterings[0] ?? null;
+
+  const timeSinceLastWatering = lastWatering
+    ? formatDistanceToNow(new Date(lastWatering.wateredAt), {
+        addSuffix: true,
+        locale: de,
+      })
+    : "Keine Daten verfügbar";
+
+  const nextWatering = plant?.nextWateringAt
+    ? formatDistanceToNow(new Date(plant.nextWateringAt), {
+        addSuffix: true,
+        locale: de,
+      })
+    : "Keine Daten verfügbar";
+
+  const refill = plant?.refillAt
+    ? formatDistanceToNow(new Date(plant.refillAt), {
+        addSuffix: true,
+        locale: de,
+      })
+    : "Keine Daten verfügbar";
 
   return (
     <div className="grid grid-cols-1 gap-4 mt-6 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 pb-6">
-      <GridCard content="1 Stunde" description="Letzte Gießung vor" />
       <GridCard
-        content="1 Tag und 15 Stunden"
-        description="Nächste Gießung in"
+        content={timeSinceLastWatering}
+        description="Letzte Gießung vor"
+        className="row-start-2 sm:row-start-1"
       />
       <GridCard
-        content="200ml"
+        content={nextWatering}
+        description="Nächste Gießung in"
+        className="row-start-3 sm:row-start-1"
+      />
+      <GridCard
+        content={`${plant?.wateringAmount} ml`}
         description="Gießvolumen"
         onClick={() => setWateringDialog(true)}
         buttonLabel="Anpassen"
+        className="row-start-5 sm:row-start-4 lg:row-start-1"
       />
       <PlantCard latestImage={latestImage} plant={plant} />
-      <GraphCard chartData={chartData} />
+      <GraphCard
+        chartDataToday={chartDataToday}
+        chartDataLastWatering={chartDataLastWatering}
+        chartDataWeek={chartDataWeek}
+        chartDataMonth={chartDataMonth}
+        chartDataYear={chartDataYear}
+        chartDataMax={chartDataMax}
+        lastWaterings={lastWaterings}
+      />
       <GridCard
-        content="4.5L"
+        content={`${plant?.waterTankVolume} ml`}
         description="Volumen Wassertank"
         onClick={() => setVolumeDialog(true)}
         buttonLabel="Ändern"
+        className="row-start-6 sm:row-start-5 md:row-start-4 lg:row-start-2"
       />
       <GridCard
-        content="4.5L"
+        content={refill}
         description="Nachfüllen spätestens in"
         onClick={() => {}}
         buttonLabel="Jetzt Auffüllen"
+        className="row-start-7 md:row-start-4 lg:row-start-3"
       />
       <GridCard
         content="TODO"
         description="TODO"
-        className="sm:col-span-2 sm:row-start-6 md:row-start-auto col-span-1 md:col-span-3 lg:col-span-2"
+        className="sm:col-span-2 sm:row-start-6 md:row-start-auto col-span-1 md:col-span-3 lg:col-span-2 row-start-8"
       />
       <WateringVolumeDialog
-        defaultValue={4500}
+        defaultValue={plant?.waterTankVolume}
         open={volumeDialog}
         setOpen={setVolumeDialog}
         onSave={onSaveVolume}
         desciption="Bitte geben Sie das neue Volumen des Wassertanks ein."
         title="Wassertank Volumen"
+        steps={[20, 50, 250]}
       />
       <WateringVolumeDialog
-        defaultValue={500}
+        defaultValue={plant?.wateringAmount}
         open={wateringDialog}
         setOpen={setWateringDialog}
         onSave={onSaveWatering}
+        steps={[10, 50, 250]}
       />
     </div>
   );

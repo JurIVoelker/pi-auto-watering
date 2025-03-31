@@ -21,8 +21,8 @@ const PlantCard: React.FC<PlantCardProps> = ({ latestImage, plant }) => {
     <Card
       className="md:col-start-3 md:row-start-1 md:row-span-3 
                  lg:row-start-1 lg:col-start-4 lg:row-span-3
-                 sm:row-span-2 
-                 pt-0"
+                 sm:row-span-2 sm:row-start-4
+                 pt-0 row-start-1"
     >
       {latestImage && (
         <Image
@@ -38,7 +38,7 @@ const PlantCard: React.FC<PlantCardProps> = ({ latestImage, plant }) => {
         <CardDescription>{plant?.description}</CardDescription>
       </CardHeader>
       <CardContent className="space-y-2">
-        <ConnectionStatus />
+        <ConnectionStatus lastPing={plant?.lastPingAt} />
         <Button className="w-full">Mehr Fotos</Button>
       </CardContent>
     </Card>

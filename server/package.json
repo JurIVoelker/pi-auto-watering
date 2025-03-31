@@ -7,9 +7,11 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
+    "prod:setup-db": "npx tsx ./prisma/scripts/setupProdDatabase.ts && npm run db:migrate",
     "db:migrate": "npx prisma migrate dev --name init",
     "db:create": "npx tsx ./prisma/scripts/setupDatabase.ts && npm run db:migrate",
     "db:default-plant": "npx tsx ./prisma/scripts/setupDefaultPlant.ts",
+    "db:test-data": "npx tsx ./prisma/scripts/addTestData.ts",
     "db:test": "npx tsx ./prisma/scripts/testDatabase.ts"
   },
   "dependencies": {
@@ -21,6 +23,7 @@
     "@radix-ui/react-tooltip": "^1.1.8",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
+    "date-fns": "^4.1.0",
     "image-size": "^2.0.1",
     "lucide-react": "^0.484.0",
     "next": "15.2.3",

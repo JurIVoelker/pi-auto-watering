@@ -1,0 +1,24 @@
+meta {
+  name: config
+  type: http
+  seq: 5
+}
+
+post {
+  url: {{url}}/api/config
+  body: json
+  auth: apikey
+}
+
+auth:apikey {
+  key: api-key
+  value: {{secret}}
+  placement: header
+}
+
+body:json {
+  {
+    "name": "Pflanze in KA",
+    "description": "Versuchspflanze für meine Seminararbeit"
+  }
+}
