@@ -9,8 +9,10 @@ SCK_PIN = 16  # Clock pin
 hx = HX711(DT_PIN, SCK_PIN)
 
 def measure_value(): 
+	GPIO.setmode(GPIO.BCM)
 	try:
 		raw_value = hx.get_raw_data()
+		print("raw_value: ", raw_value)
 		average = 0
 		for i in range(len(raw_value)):
 			average += raw_value[i]
