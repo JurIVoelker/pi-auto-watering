@@ -20,7 +20,8 @@ def measure_value():
 		return average
 	except KeyboardInterrupt:
 		raise
-	except:
+	except Exception as e:
+		print(f"Error measuring value: {e}")
 		return 0
 
 
