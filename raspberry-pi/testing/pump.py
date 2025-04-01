@@ -9,7 +9,7 @@ GPIO.setup(pin, GPIO.OUT)
 GPIO.output(pin, GPIO.LOW)
 
 # Config
-flow_delay = 0.2
+flow_delay = 0.4
 time_for_one_liter = 127.0
 time_per_ml = time_for_one_liter / 1000
 
@@ -27,10 +27,6 @@ def fill_tube():
 
 def water(ml):
   time_to_water = flow_delay + (time_per_ml * ml)
-  # First, fill the tube with water in case it is empty
-  print("Filling tube...")
-  fill_tube()
-  print("Filling tube done")
   # Then, water the plant
   print(f"Watering plant for {time_to_water} seconds...")
   activate_pump(time_to_water)
