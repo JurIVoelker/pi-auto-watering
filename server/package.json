@@ -8,7 +8,7 @@
     "start": "next start",
     "lint": "next lint",
     "prod:deploy": "npm run minio:import-migrations && npm run db:prod:migrate && npm run minio:export-migrations && npm run db:default-plant && npm run build",
-    "prod:initial-deploy": "npx prisma migrate reset --schema ./prisma/prod.schema --force && npm run db:prod:migrate && npm run minio:export-migrations && npm run db:default-plant && npm run build",
+    "prod:initial-deploy": "npx prisma migrate reset --schema ./prisma/prod.prisma --force && npm run db:prod:migrate && npm run minio:export-migrations && npm run db:default-plant && npm run build",
     "db:prod:migrate": "npx prisma migrate dev --name init --schema ./prisma/prod.prisma",
     "db:migrate": "npx prisma migrate dev --name init --schema ./prisma/dev.prisma",
     "db:create": "npx tsx ./prisma/scripts/setupDatabase.ts && npm run db:migrate",
