@@ -7,7 +7,7 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "prod:setup-db": "npx tsx ./prisma/scripts/setupProdDatabase.ts && npm run db:migrate",
+    "prod:setup-db": "npx tsx ./prisma/scripts/setupProdDatabase.ts",
     "db:migrate": "npx prisma migrate dev --name init",
     "db:create": "npx tsx ./prisma/scripts/setupDatabase.ts && npm run db:migrate",
     "db:default-plant": "npx tsx ./prisma/scripts/setupDefaultPlant.ts",
