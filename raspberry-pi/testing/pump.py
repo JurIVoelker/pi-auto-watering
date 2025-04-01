@@ -9,7 +9,7 @@ GPIO.setup(pin, GPIO.OUT)
 GPIO.output(pin, GPIO.LOW)
 
 # Config
-flow_delay = 1.85
+flow_delay = 0.2
 time_for_one_liter = 127.0
 time_per_ml = time_for_one_liter / 1000
 
