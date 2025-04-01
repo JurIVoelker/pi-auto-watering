@@ -1,8 +1,6 @@
 import RPi.GPIO as GPIO
 from hx711 import HX711
 
-GPIO.setmode(GPIO.BCM)
-
 DT_PIN = 20  # Data pin
 SCK_PIN = 16  # Clock pin
 
@@ -10,6 +8,8 @@ hx = HX711(DT_PIN, SCK_PIN)
 
 def measure_value(): 
 	GPIO.setmode(GPIO.BCM)
+	GPIO.setup(DT_PIN, GPIO.IN)
+	GPIO.setup(SCK_PIN, GPIO.OUT)
 	try:
 		raw_value = hx.get_raw_data()
 		print("raw_value: ", raw_value)
@@ -23,6 +23,8 @@ def measure_value():
 	except Exception as e:
 		print(f"Error measuring value: {e}")
 		return 0
+	finally:
+		GPIO.cleanup()
 
 
 # try:
