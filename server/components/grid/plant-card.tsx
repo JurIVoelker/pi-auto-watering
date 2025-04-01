@@ -31,7 +31,6 @@ const PlantCard: React.FC<PlantCardProps> = ({ latestImage, plant }) => {
           height={latestImage.height}
           src={"/api/public" + latestImage.url}
           alt="Plant"
-          unoptimized
         />
       )}
       <CardHeader>

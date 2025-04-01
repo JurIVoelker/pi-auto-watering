@@ -2,7 +2,7 @@ import fs from 'fs/promises';
 import path from 'path';
 
 export async function GET(req, { params }) {
-  const { dir } = params;
+  const { dir } = await params;
 
   try {
     const filePath = path.join(process.cwd(), 'public', "uploads", dir);
