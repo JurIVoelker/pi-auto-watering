@@ -1,5 +1,7 @@
 import requests
 from env import SERVER_URL, SECRET
+import base64
+from utils import image_width, image_height
 
 auth_header = {"api-key": SECRET}
 
@@ -15,13 +17,17 @@ def post_measure_weight(values):
   return data
 
 def post_upload(filename, capturedAt):
-  headers = { 
-              "api-key": SECRET, 
-              "x-captured-at": capturedAt, 
-              "Content-Type": "image/jpg", 
-             }
-  files={'files': open(filename,'rb')}
-  r = requests.post(url = f"{SERVER_URL}/api/upload", headers=headers, files=files)
+  with open(filename, "rb") as image_file:
+    encoded_string = base64.b64encode(image_file.read()).decode('utf-8')
+  
+  body = {
+    "file": encoded_string,
+    "capturedAt": capturedAt,
+    "width": image_width,
+    "height": image_height,
+  }
+  
+  r = requests.post(url = f"{SERVER_URL}/api/upload", headers=auth_header, json=body)
   if r.status_code != 200:
     print(f"Error: {r.status_code}: {r.text}")
     exit(1)
