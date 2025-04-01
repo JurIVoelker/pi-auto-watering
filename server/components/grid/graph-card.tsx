@@ -98,11 +98,11 @@ const GraphCard: React.FC<GraphCardProps> = ({
       : "last-watering"
   );
   const formatMap = {
-    today: (date: Date) => format(date, "hh:mm"),
-    "1-week": (date: Date) => format(date, "dd.MM hh:mm") + " Uhr",
+    today: (date: Date) => format(date, "HH:mm"),
+    "1-week": (date: Date) => format(date, "dd.MM HH:mm") + " Uhr",
     "1-month": (date: Date) => format(date, "dd.MM"),
     "1-year": (date: Date) => format(date, "MM.yyyy"),
-    "last-watering": (date: Date) => format(date, "dd.MM, hh:mm") + " Uhr",
+    "last-watering": (date: Date) => format(date, "dd.MM, HH:mm") + " Uhr",
     max: (date: Date) => format(date, "MM.yyyy"),
   };
 

@@ -50,13 +50,15 @@ export const getChartData = (
   const filteredWeights = limitWeightsToLength(
     weights.filter(
       (weight) =>
-        chartFilter[filterType](weight.measuredAt) && weight.measuredAt <= today
+        chartFilter[filterType](weight?.measuredAt) &&
+        weight?.measuredAt <= today
     )
   );
 
   const filteredWaterings = waterings.filter(
     (watering) =>
-      chartFilter[filterType](watering.wateredAt) && watering.wateredAt <= today
+      chartFilter[filterType](watering?.wateredAt) &&
+      watering?.wateredAt <= today
   );
 
   const combinedData = combineData(filteredWeights, filteredWaterings);
@@ -66,17 +68,17 @@ export const getChartData = (
 const combineData = (weights: WeightMeasurement[], waterings: Watering[]) => {
   const combinedData: ChartData = weights.map((m) => ({
     watering: 0,
-    weight: m.weight,
-    date: m.measuredAt,
+    weight: m?.weight,
+    date: m?.measuredAt,
   }));
 
   waterings.forEach((w) => {
     const date = new Date(w.wateredAt).getTime();
     let closestIndex = 0;
-    let closestDiff = Math.abs(weights[0].measuredAt.getTime() - date);
+    let closestDiff = Math.abs(weights[0]?.measuredAt?.getTime() - date);
 
     for (let i = 1; i < weights.length; i++) {
-      const diff = Math.abs(weights[i].measuredAt.getTime() - date);
+      const diff = Math.abs(weights[i]?.measuredAt?.getTime() - date);
       if (diff < closestDiff) {
         closestDiff = diff;
         closestIndex = i;
@@ -86,16 +88,17 @@ const combineData = (weights: WeightMeasurement[], waterings: Watering[]) => {
     const closestWeight = weights[closestIndex];
     if (closestWeight) {
       const existingEntry = combinedData.find(
-        (entry) => entry.date.getTime() === closestWeight.measuredAt.getTime()
+        (entry) =>
+          entry?.date?.getTime() === closestWeight?.measuredAt?.getTime()
       );
       if (existingEntry) {
         existingEntry.watering += w.amount;
       }
     } else {
       combinedData.push({
-        watering: w.amount,
+        watering: w?.amount,
         weight: 0,
-        date: new Date(w.wateredAt),
+        date: new Date(w?.wateredAt),
       });
     }
   });

@@ -16,7 +16,7 @@ export type POST_WATER_TYPE = z.infer<typeof POST_WATER_SCHEMA>;
 export async function POST(req: NextRequest) {
   const { body, error } = await validateRequest(
     req,
-    ["server"],
+    ["server", "user"],
     POST_WATER_SCHEMA
   );
 

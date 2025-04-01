@@ -11,6 +11,7 @@ import GraphCard from "./graph-card";
 import { ChartData } from "@/lib/utils";
 import { postRequest } from "@/lib/api/requestUtils";
 import { useRouter } from "next/navigation";
+import ActionCard from "./action-card";
 
 interface GridWrapperProps {
   latestImage: Image | null;
@@ -48,8 +49,8 @@ const GridWrapper: React.FC<GridWrapperProps> = ({
       console.error(res.error);
       return;
     }
-    refresh();
     setVolumeDialog(false);
+    refresh();
   };
 
   const onSaveWatering = async (amount: number) => {
@@ -60,8 +61,8 @@ const GridWrapper: React.FC<GridWrapperProps> = ({
       console.error(res.error);
       return;
     }
-    refresh();
     setVolumeDialog(false);
+    refresh();
   };
 
   const lastWatering = lastWaterings[0] ?? null;
@@ -130,11 +131,7 @@ const GridWrapper: React.FC<GridWrapperProps> = ({
         buttonLabel="Jetzt Auffüllen"
         className="row-start-7 md:row-start-4 lg:row-start-3"
       />
-      <GridCard
-        content="TODO"
-        description="TODO"
-        className="sm:col-span-2 sm:row-start-6 md:row-start-auto col-span-1 md:col-span-3 lg:col-span-2 row-start-8"
-      />
+      <ActionCard wateringAmount={plant?.wateringAmount || 0} />
       <WateringVolumeDialog
         defaultValue={plant?.waterTankVolume}
         open={volumeDialog}
