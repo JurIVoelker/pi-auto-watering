@@ -22,10 +22,10 @@ def measure_value():
 		return 0
 
 
-try:
-	while True:
-		print(f"value: {measure_value()}")
-except KeyboardInterrupt:
-	print("Exiting program...")
-finally:
-	GPIO.cleanup()
+# try:
+# 	while True:
+# 		print(f"value: {measure_value()}")
+# except KeyboardInterrupt:
+# 	print("Exiting program...")
+# finally:
+# 	GPIO.cleanup()

@@ -36,9 +36,9 @@ def water(ml):
   activate_pump(time_to_water)
   print("Watering done")
 
-try:
-  water(250)
-except KeyboardInterrupt:
-  print("\nProgram interrupted. Cleaning up GPIO...")
-finally:
-  GPIO.cleanup()
+# try:
+#   water(250)
+# except KeyboardInterrupt:
+#   print("\nProgram interrupted. Cleaning up GPIO...")
+# finally:
+#   GPIO.cleanup()
