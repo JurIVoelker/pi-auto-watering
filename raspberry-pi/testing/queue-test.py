@@ -24,7 +24,6 @@ while True:
         print("Measuring weight...")
         value = measure_value()
         print(f"Raw weight value: {value}")
-        value = 123
         value = max(0, round((value - 110000) / 94, 1))
         print(f"Processed weight value: {value}")
         res = post_measure_weight([{"value": value, "measuredAt": get_current_time_string()}])
