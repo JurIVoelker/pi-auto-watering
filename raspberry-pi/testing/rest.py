@@ -23,8 +23,8 @@ def post_upload(filename, capturedAt):
   body = {
     "file": encoded_string,
     "capturedAt": capturedAt,
-    "width": image_width,
-    "height": image_height,
+    "width": image_height,
+    "height": image_width,
   }
   
   r = requests.post(url = f"{SERVER_URL}/api/upload", headers=auth_header, json=body)
