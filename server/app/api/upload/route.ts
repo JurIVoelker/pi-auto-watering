@@ -11,7 +11,6 @@ import { v6 } from "uuid";
 import sizeOf from "image-size";
 import { PLANT_ID } from "@/constants/constants";
 import { updateLatestPing } from "@/lib/api/apiUtils";
-import { buffer } from "stream/consumers";
 
 export const config = {
   api: {
