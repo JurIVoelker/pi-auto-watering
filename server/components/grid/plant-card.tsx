@@ -31,6 +31,9 @@ const PlantCard: React.FC<PlantCardProps> = ({ latestImage, plant }) => {
           height={latestImage.height}
           src={latestImage.url}
           alt="Plant"
+          loader={() => {
+            return latestImage.url;
+          }}
         />
       )}
       <CardHeader>
