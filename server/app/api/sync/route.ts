@@ -34,12 +34,15 @@ export async function GET(req: NextRequest) {
     },
   });
 
-  await prisma.watering.deleteMany({
+  await prisma.watering.updateMany({
     where: {
       executed: false,
       wateredAt: {
         lte: new Date(),
       },
+    },
+    data: {
+      executed: true,
     },
   });
 
