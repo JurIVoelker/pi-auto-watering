@@ -2,6 +2,7 @@ import { PLANT_ID } from "@/constants/constants";
 import { updateLatestPing } from "@/lib/api/apiUtils";
 import { validateRequest } from "@/lib/api/auth";
 import { prisma } from "@/prisma/prisma";
+import { revalidatePath } from "next/cache";
 import { NextRequest } from "next/server";
 import { z } from "zod";
 
@@ -43,6 +44,7 @@ export async function POST(req: NextRequest) {
   });
 
   await updateLatestPing();
+  revalidatePath("/dashboard");
 
   return new Response(JSON.stringify({ ...measurement }), {
     status: 200,

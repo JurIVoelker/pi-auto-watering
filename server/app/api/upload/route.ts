@@ -11,6 +11,7 @@ import { v6 } from "uuid";
 import sizeOf from "image-size";
 import { PLANT_ID } from "@/constants/constants";
 import { updateLatestPing } from "@/lib/api/apiUtils";
+import { revalidatePath } from "next/cache";
 
 export const config = {
   api: {
@@ -83,6 +84,7 @@ export async function POST(request: NextRequest): Promise<Response> {
   await updateLatestPing();
 
   fs.writeFileSync(filePath, buffer, "base64");
+  revalidatePath("/dashboard");
 
   return new Response(JSON.stringify(image), {
     status: 200,
