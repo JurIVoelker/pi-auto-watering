@@ -52,6 +52,9 @@ while True:
           folder_path = "./camera-data"
           filenames = [os.path.join(folder_path, f) for f in os.listdir(folder_path) if os.path.isfile(os.path.join(folder_path, f))]
           target_file = filenames[0] if filenames else None
+          for file in filenames[1:]:
+            print(f"Adding file to queue for upload: {file}")
+            q.put({"type": "image_upload", "file": file})
           if target_file:
             print(f"Uploading file: {target_file}")
             res = post_upload(target_file, capturedAt=get_current_time_string())
