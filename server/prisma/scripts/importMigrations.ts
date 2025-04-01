@@ -24,12 +24,12 @@ const importMigrations = async () => {
     fs.mkdirSync(outputDir, { recursive: true });
   }
 
-  await minio.fGetObject(bucketName, zipFileName, zipFilePath, function (err) {
-    if (err) {
-      return console.log(err);
-    }
+  try {
+    await minio.fGetObject(bucketName, zipFileName, zipFilePath);
     console.log("success");
-  });
+  } catch (err) {
+    console.log(err);
+  }
 
   console.log(`Downloaded ${zipFileName} to ${zipFilePath}`);
 
