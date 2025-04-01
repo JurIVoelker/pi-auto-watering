@@ -1,6 +1,5 @@
 import requests
 from env import SERVER_URL, SECRET
-from utils import get_current_time
 
 auth_header = {"api-key": SECRET}
 
