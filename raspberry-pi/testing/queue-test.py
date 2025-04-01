@@ -13,6 +13,8 @@ measure_delay = datetime.timedelta(seconds=600)
 
 print("Starting the queue processing loop...")
 
+GPIO.cleanup()
+
 while True:
   while not q.empty():
     try:
@@ -68,5 +70,6 @@ while True:
     except Exception as e:
       print(f"Unexpected error: {e}. Retrying in 5 seconds...")
     finally:
+      GPIO.cleanup()
       print("Sleeping for 5 seconds...")
       time.sleep(5)
