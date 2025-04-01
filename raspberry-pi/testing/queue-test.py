@@ -1,15 +1,19 @@
 from queue import Queue
-from rest import get_sync, post_measure_weight
+from rest import get_sync, post_measure_weight, post_upload
 import time
 import datetime
 from utils import get_current_time, get_current_time_string
 from pump import water
 from scale import measure_value
 import RPi.GPIO as GPIO
+from camera_testing import capture_image
+import os
 
 q = Queue()
 last_weight_measurement = None
 measure_delay = datetime.timedelta(seconds=600)
+last_image_upload = None
+image_delay = datetime.timedelta(seconds=600)
 
 print("Starting the queue processing loop...")
 
@@ -35,25 +39,48 @@ while True:
         except Exception as e:
           print(f"Error watering: {e}")
         finally:
+          q.task_done()
           GPIO.cleanup()
           print("Watering done")
+      elif item["type"] == "image_capture":
+        print("Capturing image...")
+        capture_image()
+      elif item["type"] == "image_upload":
+        print("Uploading image...")
+        print("Getting filenames from ./camera-data folder...")
+        try:
+          folder_path = "./camera-data"
+          filenames = [os.path.join(folder_path, f) for f in os.listdir(folder_path) if os.path.isfile(os.path.join(folder_path, f))]
+          target_file = filenames[0] if filenames else None
+          if target_file:
+            print(f"Uploading file: {target_file}")
+            res = post_upload(target_file, capturedAt=get_current_time_string())
+            print(f"Response from post_upload: {res}")
+            os.remove(target_file)
+            print(f"Removed file: {target_file}")
+          else:
+            print("No files to upload.")
+          print(f"Filenames found: {filenames}")
+        except Exception as e:
+          print(f"Error retrieving filenames: {e}")
       else:
         print(f"Unknown item type: {item}")
-      q.task_done()
     except KeyboardInterrupt:
       print("KeyboardInterrupt detected. Exiting...")
       exit(1)
     except Exception as e:
       print(f"Error processing item: {e}")
 
-  if last_weight_measurement is None:
-    print("No previous weight measurement found. Adding measure_weight task to queue.")
+  if last_weight_measurement is None or get_current_time() - last_weight_measurement >= measure_delay:
+    print("Adding measure_weight task to queue.")
     q.put({"type": "measure_weight"})
     last_weight_measurement = get_current_time()
-  elif get_current_time() - last_weight_measurement >= measure_delay:
-    print("Time to measure weight again. Adding measure_weight task to queue.")
-    q.put({"type": "measure_weight"})
-    last_weight_measurement = get_current_time()
+  if (last_image_upload is None or get_current_time() - last_image_upload >= image_delay):
+    print("Adding image_upload task to queue.")
+    q.put({"type": "image_capture"})
+    q.put({"type": "image_upload"})
+    last_image_upload = get_current_time()
+    
 
   if q.empty():
     try:
