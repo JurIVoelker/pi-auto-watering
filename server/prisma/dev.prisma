@@ -6,9 +6,9 @@ generator client {
   previewFeatures = ["relationJoins"]
 }
 
-datasource db {
-  provider = env("DB_PROVIDER")
-  url      = env("DB_URL")
+datasource db2 {
+  provider = "sqlite"
+  url      = "file:./db/database.db"
 }
 
 model WeightMeasurement {
