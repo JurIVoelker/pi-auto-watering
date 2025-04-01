@@ -7,6 +7,7 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
+    "prod:deploy": "npm run minio:import-migrations && npm run db:migrate && npm run minio:export-migrations && npm run db:default-plant && npm run build",
     "db:prod:migrate": "npx prisma migrate dev --name init --schema ./prisma/prod.prisma",
     "db:migrate": "npx prisma migrate dev --name init --schema ./prisma/dev.prisma",
     "db:create": "npx tsx ./prisma/scripts/setupDatabase.ts && npm run db:migrate",
@@ -14,7 +15,7 @@
     "db:test-data": "npx tsx ./prisma/scripts/addTestData.ts",
     "db:test": "npx tsx ./prisma/scripts/testDatabase.ts",
     "minio:import-migrations": "npx tsx ./prisma/scripts/importMigrations.ts",
-    "minio:export-migrations": "npx tsx ./prisma/scripts/exportMigrations.ts"
+    "minio:export-migrations": "npx tsx ./prisma/scripts/uploadMigrations.ts"
   },
   "dependencies": {
     "@prisma/client": "6.5.0",
