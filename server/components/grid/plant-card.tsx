@@ -29,7 +29,7 @@ const PlantCard: React.FC<PlantCardProps> = ({ latestImage, plant }) => {
           className="rounded-t-lg"
           width={latestImage.width}
           height={latestImage.height}
-          src={latestImage.url}
+          src={"/api/public" + latestImage.url}
           alt="Plant"
           unoptimized
         />
