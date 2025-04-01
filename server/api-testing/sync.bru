@@ -1,0 +1,15 @@
+meta {
+  name: sync
+  type: http
+  seq: 7
+}
+
+get {
+  url: {{url}}/api/sync
+  body: none
+  auth: inherit
+}
+
+headers {
+  api-key: {{secret}}
+}

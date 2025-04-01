@@ -6,8 +6,9 @@ import { NextRequest } from "next/server";
 import { z } from "zod";
 
 const POST_WATER_SCHEMA = z.object({
-  wateredAt: z.string().datetime(),
+  wateredAt: z.string(),
   amount: z.number().min(0),
+  executed: z.boolean().optional(),
 });
 
 export type POST_WATER_TYPE = z.infer<typeof POST_WATER_SCHEMA>;
@@ -26,13 +27,14 @@ export async function POST(req: NextRequest) {
     });
   }
 
-  const { amount, wateredAt } = body as POST_WATER_TYPE;
+  const { amount, wateredAt, executed } = body as POST_WATER_TYPE;
 
   const watering = await prisma.watering.create({
     data: {
       amount,
       wateredAt: new Date(wateredAt),
       plantId: PLANT_ID,
+      executed,
     },
   });
 

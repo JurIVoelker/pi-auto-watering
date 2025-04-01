@@ -11,6 +11,13 @@ import { v6 } from "uuid";
 import sizeOf from "image-size";
 import { PLANT_ID } from "@/constants/constants";
 import { updateLatestPing } from "@/lib/api/apiUtils";
+import { buffer } from "stream/consumers";
+
+export const config = {
+  api: {
+    bodyParser: false,
+  },
+};
 
 export async function POST(request: NextRequest): Promise<Response> {
   const hasPermission = await hasServersidePermission(["server"], request);
@@ -76,7 +83,7 @@ export async function POST(request: NextRequest): Promise<Response> {
 
   await updateLatestPing();
 
-  fs.writeFileSync(filePath, buffer);
+  fs.writeFileSync(filePath, buffer, "base64");
 
   return new Response(JSON.stringify(image), {
     status: 200,

@@ -1,7 +1,7 @@
 import { filterTypes as filterType } from "@/components/grid/graph-card";
 import { Watering, WeightMeasurement } from "@prisma/client";
 import { clsx, type ClassValue } from "clsx";
-import { startOfDay, subDays } from "date-fns";
+import { endOfDay, startOfDay, subDays } from "date-fns";
 import { twMerge } from "tailwind-merge";
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
@@ -34,12 +34,13 @@ export const getChartData = (
   filterType: filterType,
   waterings: Watering[]
 ): ChartData => {
-  const today = startOfDay(new Date());
+  const today = endOfDay(new Date());
+  const startOfToday = startOfDay(today);
 
   const latestWatering = waterings[0];
   const chartFilter = {
     "last-watering": (date: Date) => date >= latestWatering?.wateredAt,
-    today: (date: Date) => date >= today,
+    today: (date: Date) => date >= startOfToday,
     "1-week": (date: Date) => date >= subDays(today, 7),
     "1-month": (date: Date) => date >= subDays(today, 30),
     "1-year": (date: Date) => date >= subDays(today, 365),

@@ -39,6 +39,7 @@ model Watering {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
   wateredAt DateTime
+  executed  Boolean  @default(true)
   plantId   Int
   plant     Plant    @relation(fields: [plantId], references: [id])
 }

@@ -9,7 +9,7 @@ const POST_MEASURE_WEIGHT_SCHEMA = z.object({
   values: z.array(
     z.object({
       value: z.number(),
-      measuredAt: z.string().datetime(),
+      measuredAt: z.string(),
     })
   ),
 });
