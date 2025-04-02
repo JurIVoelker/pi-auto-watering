@@ -14,10 +14,9 @@ if not os.path.exists(image_folder):
 width = image_width
 height = image_height
 
-picam = Picamera2()
-picam.configure(picam.create_still_configuration(main={"size": (width, height)}))
-
 def capture_image():
+    picam = Picamera2()
+    picam.configure(picam.create_still_configuration(main={"size": (width, height)}))
     picam.start()
     timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
     filename = f"image_{timestamp}.jpg"
