@@ -26,6 +26,7 @@ import {
 } from "../ui/select";
 import { useState } from "react";
 import { ChartData } from "@/lib/utils";
+import { de } from "date-fns/locale";
 
 interface GraphCardProps {
   chartDataToday: ChartData;
@@ -98,12 +99,13 @@ const GraphCard: React.FC<GraphCardProps> = ({
       : "last-watering"
   );
   const formatMap = {
-    today: (date: Date) => format(date, "HH:mm"),
-    "1-week": (date: Date) => format(date, "EEE HH:mm"),
-    "1-month": (date: Date) => format(date, "dd.MM"),
-    "1-year": (date: Date) => format(date, "MM.yyyy"),
-    "last-watering": (date: Date) => format(date, "dd.MM, HH:mm") + " Uhr",
-    max: (date: Date) => format(date, "MM.yyyy"),
+    today: (date: Date) => format(date, "HH:mm", { locale: de }),
+    "1-week": (date: Date) => format(date, "EEE HH:mm", { locale: de }),
+    "1-month": (date: Date) => format(date, "dd.MM", { locale: de }),
+    "1-year": (date: Date) => format(date, "MM.yyyy", { locale: de }),
+    "last-watering": (date: Date) =>
+      format(date, "dd.MM, HH:mm", { locale: de }) + " Uhr",
+    max: (date: Date) => format(date, "MM.yyyy", { locale: de }),
   };
 
   const currentFormatter = formatMap[filter] ?? "dd:MM.yyyy";
