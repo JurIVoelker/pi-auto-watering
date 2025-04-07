@@ -58,6 +58,7 @@ while True:
             q.put({"type": "image_upload", "file": file})
           if target_file:
             upload_image(target_file)
+            os.remove(target_file)
           else:
             print("No files to upload.")
           print(f"Filenames found: {filenames}")
