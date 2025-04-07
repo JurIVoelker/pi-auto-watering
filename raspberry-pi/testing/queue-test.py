@@ -8,6 +8,7 @@ from scale import measure_value
 import RPi.GPIO as GPIO
 from camera_testing import capture_image
 import os
+from minio_test import upload_image
 
 q = Queue()
 last_weight_measurement = None
@@ -56,11 +57,7 @@ while True:
             print(f"Adding file to queue for upload: {file}")
             q.put({"type": "image_upload", "file": file})
           if target_file:
-            print(f"Uploading file: {target_file}")
-            res = post_upload(target_file, capturedAt=get_current_time_string())
-            print(f"Response from post_upload: {res}")
-            os.remove(target_file)
-            print(f"Removed file: {target_file}")
+            upload_image(target_file)
           else:
             print("No files to upload.")
           print(f"Filenames found: {filenames}")
