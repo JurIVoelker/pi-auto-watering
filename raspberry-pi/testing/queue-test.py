@@ -53,7 +53,8 @@ while True:
           print("Watering done")
       elif item["type"] == "image_capture":
         print("Capturing image...")
-        capture_image()
+        file_name = capture_image()
+        q.put({"type": "image_upload", "file": file_name})
       elif item["type"] == "image_upload":
         print("Uploading image...")
         try:

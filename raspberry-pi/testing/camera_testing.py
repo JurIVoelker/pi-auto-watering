@@ -29,4 +29,5 @@ def capture_image():
     # Rotate the image to the right (90 degrees clockwise)
     with Image.open(filepath) as img:
         rotated_img = img.rotate(-90, expand=True)
-        rotated_img.save(filepath)
+        rotated_img.save(filepath)  
+    return filepath

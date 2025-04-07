@@ -10,8 +10,6 @@ client = Minio(
 
 # The destination bucket and filename on the MinIO server
 bucket_name = "raspberry-pi-images"
-destination_file = "my-test-file.txt"
-
 
 def upload_image(image_path):
     file_name = image_path.split("/")[-1]
