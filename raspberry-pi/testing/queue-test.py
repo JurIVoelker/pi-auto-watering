@@ -20,6 +20,14 @@ print("Starting the queue processing loop...")
 
 GPIO.cleanup()
 
+folder_path = "./camera-data"
+filenames = [os.path.join(folder_path, f) for f in os.listdir(folder_path) if os.path.isfile(os.path.join(folder_path, f))]
+target_file = filenames[0] if filenames else None
+print("Getting filenames from ./camera-data folder...")
+for file in filenames[1:]:
+  print(f"Adding file to queue for upload: {file}")
+  q.put({"type": "image_upload", "file": file})
+
 while True:
   while not q.empty():
     try:
@@ -48,14 +56,7 @@ while True:
         capture_image()
       elif item["type"] == "image_upload":
         print("Uploading image...")
-        print("Getting filenames from ./camera-data folder...")
         try:
-          folder_path = "./camera-data"
-          filenames = [os.path.join(folder_path, f) for f in os.listdir(folder_path) if os.path.isfile(os.path.join(folder_path, f))]
-          target_file = filenames[0] if filenames else None
-          for file in filenames[1:]:
-            print(f"Adding file to queue for upload: {file}")
-            q.put({"type": "image_upload", "file": file})
           if target_file:
             upload_image(target_file)
             os.remove(target_file)
