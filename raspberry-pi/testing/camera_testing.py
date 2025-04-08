@@ -5,6 +5,8 @@ import time
 from datetime import datetime
 from PIL import Image
 import os
+import random
+import string
 
 # Define the image folder
 image_folder = "camera-data"
@@ -17,15 +19,17 @@ if not os.path.exists(image_folder):
 def capture_image():
     width = image_width
     height = image_height
-    timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
-    filename = f"image_{timestamp}.jpg"
+    timestamp = datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
+    randomString = ''.join(random.choices(string.ascii_letters, k=32))
+    filename = f"{timestamp}_{height}-{width}_{randomString}.jpg"
+    print(filename)
     filepath = os.path.join(image_folder, filename)
 
     if picam.started:
         picam.stop()
     try:
         picam.configure(picam.create_still_configuration(main={"size": (width, height)}))
-        picam.set_controls({"AeEnable": True, "AwbEnable": True, "AwbMode": "auto"})
+        picam.set_controls({"AeEnable": True, "AwbEnable": True})
         picam.start()
         time.sleep(1.5)  # Let AE settle
         picam.capture_file(filepath)
