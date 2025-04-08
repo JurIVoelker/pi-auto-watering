@@ -22,7 +22,6 @@ def capture_image():
     timestamp = datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
     randomString = ''.join(random.choices(string.ascii_letters, k=32))
     filename = f"{timestamp}_{height}-{width}_{randomString}.jpg"
-    print(filename)
     filepath = os.path.join(image_folder, filename)
 
     if picam.started:
