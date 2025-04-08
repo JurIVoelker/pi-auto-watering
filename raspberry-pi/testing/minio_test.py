@@ -1,5 +1,6 @@
 from minio import Minio
 from env import MINIO_URL, MINIO_ACCESS_KEY, MINIO_SECRET_KEY
+import os
 
 client = Minio(
     MINIO_URL,
@@ -34,3 +35,17 @@ def upload_image(image_path):
         )
     except:
         print("Unexpected error occurred.")
+
+# Directory containing the images
+image_directory = "./camera-data"
+# Get the list of files in the directory
+files = os.listdir(image_directory)
+
+# Check if there are any files in the directory
+if files:
+    # Get the first file
+    first_file = os.path.join(image_directory, files[0])
+    # Upload the first file
+    upload_image(first_file)
+else:
+    print("No files found in the directory.")

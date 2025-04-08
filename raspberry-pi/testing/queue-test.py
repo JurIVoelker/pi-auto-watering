@@ -58,12 +58,11 @@ while True:
       elif item["type"] == "image_upload":
         print("Uploading image...")
         try:
-          if target_file:
-            upload_image(target_file)
-            os.remove(target_file)
+          if item["file"]:
+            upload_image(item["file"])
+            os.remove(item["file"])
           else:
             print("No files to upload.")
-          print(f"Filenames found: {filenames}")
         except Exception as e:
           print(f"Error retrieving filenames: {e}")
       else:
