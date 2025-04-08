@@ -1,6 +1,6 @@
 "use client";
 
-import { Image, Plant, Watering } from "@prisma/client";
+import { Plant, Watering } from "@prisma/client";
 import GridCard from "./grid-card";
 import PlantCard from "./plant-card";
 import { useState } from "react";
@@ -12,9 +12,10 @@ import { ChartData } from "@/lib/utils";
 import { postRequest } from "@/lib/api/requestUtils";
 import { useRouter } from "next/navigation";
 import ActionCard from "./action-card";
+import { ImageType } from "@/types/types";
 
 interface GridWrapperProps {
-  latestImage: Image | null;
+  latestImage: ImageType | null;
   plant: Plant | null;
   lastWaterings: Watering[];
   chartDataToday: ChartData;

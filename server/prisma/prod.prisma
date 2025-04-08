@@ -21,18 +21,6 @@ model WeightMeasurement {
   plant      Plant    @relation(fields: [plantId], references: [id])
 }
 
-model Image {
-  id         Int      @id @default(autoincrement())
-  url        String   @unique
-  createdAt  DateTime @default(now())
-  updatedAt  DateTime @updatedAt
-  capturedAt DateTime
-  width      Int      @default(0)
-  height     Int      @default(0)
-  plantId    Int
-  plant      Plant    @relation(fields: [plantId], references: [id])
-}
-
 model Watering {
   id        Int      @id @default(autoincrement())
   amount    Float
@@ -57,6 +45,5 @@ model Plant {
   waterTankVolume Float               @default(0)
   waterTankLevel  Float               @default(0)
   weight          WeightMeasurement[]
-  images          Image[]
   watering        Watering[]
 }

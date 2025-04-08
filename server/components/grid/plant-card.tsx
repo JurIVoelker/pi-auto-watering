@@ -1,5 +1,5 @@
 "use client";
-import { Image as ImageType, Plant } from "@prisma/client";
+import { Plant } from "@prisma/client";
 import {
   Card,
   CardContent,
@@ -10,6 +10,7 @@ import {
 import Image from "next/image";
 import { Button } from "../ui/button";
 import ConnectionStatus from "../connection-status";
+import { ImageType } from "@/types/types";
 
 interface PlantCardProps {
   latestImage: ImageType | null;
@@ -29,7 +30,7 @@ const PlantCard: React.FC<PlantCardProps> = ({ latestImage, plant }) => {
           className="rounded-t-lg"
           width={latestImage.width}
           height={latestImage.height}
-          src={"/api/public" + latestImage.url}
+          src={"/api/public/" + latestImage.name}
           alt="Plant"
         />
       )}
