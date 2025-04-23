@@ -6,10 +6,7 @@ SCK_PIN = 16  # Clock pin
 
 hx = HX711(DT_PIN, SCK_PIN)
 
-def measure_value(): 
-	GPIO.setmode(GPIO.BCM)
-	GPIO.setup(DT_PIN, GPIO.IN)
-	GPIO.setup(SCK_PIN, GPIO.OUT)
+def measure_raw_value():
 	try:
 		raw_value = hx.get_raw_data()
 		print("raw_value: ", raw_value)
@@ -26,6 +23,34 @@ def measure_value():
 	finally:
 		GPIO.cleanup()
 
+def get_median(array):
+	if len(array) == 0:
+		return 0
+	array.sort()
+	mid = len(array) // 2
+	if len(array) % 2 == 0:
+		return (array[mid - 1] + array[mid]) / 2
+	else:
+		return array[mid]
+
+def measure_value(): 
+	GPIO.setmode(GPIO.BCM)
+	GPIO.setup(DT_PIN, GPIO.IN)
+	GPIO.setup(SCK_PIN, GPIO.OUT)
+	values = []
+	try:
+		for i in range(30): 
+			raw_value = measure_raw_value()
+			if raw_value != 0:
+				values.append(raw_value)
+		return get_median(values)
+	except KeyboardInterrupt:
+		raise
+	except Exception as e:
+		print(f"Error measuring value: {e}")
+		return 0
+	finally:
+		GPIO.cleanup()
 
 # try:
 # 	while True:
