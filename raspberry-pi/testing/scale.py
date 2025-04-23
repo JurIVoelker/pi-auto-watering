@@ -8,8 +8,10 @@ hx = HX711(DT_PIN, SCK_PIN)
 
 def measure_raw_value():
 	try:
+		GPIO.setmode(GPIO.BCM)
+		GPIO.setup(DT_PIN, GPIO.IN)
+		GPIO.setup(SCK_PIN, GPIO.OUT)
 		raw_value = hx.get_raw_data()
-		print("raw_value: ", raw_value)
 		average = 0
 		for i in range(len(raw_value)):
 			average += raw_value[i]
@@ -34,12 +36,9 @@ def get_median(array):
 		return array[mid]
 
 def measure_value(): 
-	GPIO.setmode(GPIO.BCM)
-	GPIO.setup(DT_PIN, GPIO.IN)
-	GPIO.setup(SCK_PIN, GPIO.OUT)
 	values = []
 	try:
-		for i in range(30): 
+		for i in range(20): 
 			raw_value = measure_raw_value()
 			if raw_value != 0:
 				values.append(raw_value)
