@@ -1,16 +1,13 @@
 import { prisma } from "../prisma";
 
 const exec = async () => {
-  await prisma.watering.deleteMany({
-    where: {
-      plantId: 1,
+  const mesaurements = await prisma.weightMeasurement.findMany({
+    take: 100,
+    orderBy: {
+      measuredAt: "desc",
     },
   });
-  await prisma.weightMeasurement.deleteMany({
-    where: {
-      plantId: 1,
-    },
-  });
+  console.log(mesaurements);
 };
 
 exec();
