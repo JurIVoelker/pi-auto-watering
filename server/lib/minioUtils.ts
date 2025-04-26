@@ -11,6 +11,8 @@ export const getLatestImage = async () => {
     secretKey: SECRET_KEY || "undefined",
   });
 
+  const directories: { prefix?: string; size?: number }[] = [];
+
   const data: {
     name?: string;
     lastModified?: Date;
@@ -22,7 +24,26 @@ export const getLatestImage = async () => {
 
   try {
     await new Promise<void>((resolve, reject) => {
-      const stream = minio.listObjects(bucketName, "", true);
+      const stream = minio.listObjects(bucketName, "", false);
+
+      stream.on("data", (obj) => {
+        directories.push(obj);
+      });
+
+      stream.on("end", () => {
+        resolve();
+      });
+
+      stream.on("error", (err) => {
+        console.error(err);
+        reject(err);
+      });
+    });
+
+    const targetPrefix = directories[directories.length - 1]?.prefix || "";
+
+    await new Promise<void>((resolve, reject) => {
+      const stream = minio.listObjects(bucketName, targetPrefix, true);
 
       stream.on("data", (obj) => {
         data.push(obj);
