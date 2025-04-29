@@ -2,12 +2,12 @@ import * as path from "path";
 import * as fs from "fs";
 import { generateBarChart, generateLineChart } from "./chart";
 
-const subfolder = "fixed-sensor";
+const subfolder = "values-without-median";
 const dirPath = path.join(__dirname, `./data`);
 
 const filenames = fs.readdirSync(`${dirPath}/${subfolder}`);
 
-type Result = { value: number; timestamp: Date };
+type Result = { weight: number; measuredAt: Date };
 
 const results: Result[] = filenames
   .map((filename: string) => {
@@ -27,40 +27,40 @@ const results: Result[] = filenames
     }
   })
   .reduce((acc, curr) => [...acc, ...curr], [])
-  .map((result: { value: number; timestamp: string }) => {
-    const parsedTimestamp = new Date(result.timestamp);
+  .map((result: Result) => {
+    const parsedTimestamp = new Date(result.measuredAt);
     if (isNaN(parsedTimestamp.getTime())) {
       return null;
     }
     return {
-      value: result.value,
-      timestamp: parsedTimestamp,
+      weight: result.weight,
+      measuredAt: parsedTimestamp,
     };
   })
   .sort(
-    (a: Result, b: Result) => a.timestamp.getTime() - b.timestamp.getTime()
+    (a: Result, b: Result) => a.measuredAt.getTime() - b.measuredAt.getTime()
   );
 
 const divisionCount = 500;
 
-// const max = results.reduce(
-//   (acc, curr) => (curr.value > acc ? curr.value : acc),
-//   -Infinity
-// );
+const max = results.reduce(
+  (acc, curr) => (curr.weight > acc ? curr.weight : acc),
+  -Infinity
+);
 
-// const min = results.reduce(
-//   (acc, curr) => (curr.value < acc ? curr.value : acc),
-//   Infinity
-// );
-const min = 570000;
-const max = 750000;
+const min = results.reduce(
+  (acc, curr) => (curr.weight < acc ? curr.weight : acc),
+  Infinity
+);
+// const min = 570000;
+// const max = 750000;
 
 const step = (max - min) / divisionCount;
 const histogram = Array.from({ length: divisionCount }, (_, i) => {
   const lowerBound = min + i * step;
   const upperBound = lowerBound + step;
   const count = results.filter(
-    (result) => result.value >= lowerBound && result.value < upperBound
+    (result) => result.weight >= lowerBound && result.weight < upperBound
   ).length;
   return { step: lowerBound, count };
 });
@@ -72,11 +72,11 @@ generateBarChart({ data, labels, width: 1920, height: 1080 });
 
 generateLineChart({
   data: results
-    .map((result) => result.value)
+    .map((result) => result.weight)
     .filter((value) => value < max && value > min),
   width: 1920,
   height: 1080,
   labels: results.map((result) =>
-    result.timestamp.toLocaleTimeString("en-US", { hour12: false })
+    result.measuredAt.toLocaleTimeString("en-US", { hour12: false })
   ),
 });

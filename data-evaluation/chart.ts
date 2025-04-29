@@ -80,7 +80,7 @@ export const generateLineChart = ({
       labels,
       datasets: [
         {
-          label: "Value over time",
+          label: "Gewicht in Gramm",
           data,
           fill: false,
           borderColor: "rgba(75, 192, 192, 1)",
@@ -94,14 +94,14 @@ export const generateLineChart = ({
           type: "category",
           title: {
             display: true,
-            text: "Timestamp",
+            text: "Uhrzeit",
           },
         },
         y: {
           beginAtZero: true,
           title: {
             display: true,
-            text: "Value",
+            text: "Gewicht in Gramm",
           },
         },
       },
