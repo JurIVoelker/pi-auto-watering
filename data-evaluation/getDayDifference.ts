@@ -1,5 +1,5 @@
 import { readValues } from "./utils";
-import { getDay } from "date-fns";
+import { getDay, format } from "date-fns";
 
 const subfolder = "values-with-median";
 const results = readValues(subfolder);
@@ -11,7 +11,7 @@ for (const result of results) {
   const prevDay = getDay(prev.measuredAt);
   if (day === prevDay) continue;
   const diff = result.weight - prev.weight;
-  console.log(`On day ${day}: ${Math.floor(diff)}g`);
+  console.log(`On ${format(result.measuredAt, "dd.MM")}: ${Math.floor(diff)}g`);
 
   prev = result;
 }
