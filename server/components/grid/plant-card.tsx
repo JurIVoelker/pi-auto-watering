@@ -8,9 +8,11 @@ import {
   CardTitle,
 } from "../ui/card";
 import Image from "next/image";
-import { Button } from "../ui/button";
+import { buttonVariants } from "../ui/button";
 import ConnectionStatus from "../connection-status";
 import { ImageType } from "@/types/types";
+import Link from "next/link";
+import { cn } from "@/lib/utils";
 
 interface PlantCardProps {
   latestImage: ImageType | null;
@@ -32,6 +34,7 @@ const PlantCard: React.FC<PlantCardProps> = ({ latestImage, plant }) => {
           height={latestImage.height}
           src={"/api/public/" + latestImage.name}
           alt="Plant"
+          sizes="(max-width: 640px) 557px, (max-width: 768px) 333px, (max-width: 1024px) 307px, 286px"
         />
       )}
       <CardHeader>
@@ -40,7 +43,15 @@ const PlantCard: React.FC<PlantCardProps> = ({ latestImage, plant }) => {
       </CardHeader>
       <CardContent className="space-y-2">
         <ConnectionStatus lastPing={plant?.lastPingAt} />
-        <Button className="w-full">Mehr Fotos</Button>
+        <Link
+          href="/images"
+          className={cn(
+            buttonVariants({ variant: "default" }),
+            "w-full no-underline"
+          )}
+        >
+          Mehr Fotos
+        </Link>
       </CardContent>
     </Card>
   );

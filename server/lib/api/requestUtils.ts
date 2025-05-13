@@ -9,9 +9,10 @@ const makeRequest = async (
   body?: object,
   options: RequestOptions = {}
 ): Promise<{ data?: unknown; error?: ZodIssue[] }> => {
+  const url = process.env.NEXT_PUBLIC_URL;
   const { headers } = options || {};
 
-  const response = await fetch(path, {
+  const response = await fetch(url + path, {
     method,
     headers: {
       "Content-Type": "application/json",
