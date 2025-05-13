@@ -2,6 +2,8 @@ import Wrapper from "@/components/wrapper";
 import { getRequest } from "@/lib/api/requestUtils";
 import Image from "next/image";
 
+export const revalidate = 3600;
+
 const ImagesPage = async () => {
   const response = await getRequest("/api/image/folders");
   const folders = response as {
