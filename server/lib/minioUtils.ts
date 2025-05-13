@@ -220,8 +220,11 @@ export const getImages = async () => {
           .then(() => true)
           .catch(() => false)
       ) {
+        console.log(`File ${outputFile} already exists. Skipping download.`);
         continue;
       }
+      // @ts-expect-error idk
+      console.log(`Downloading ${data?.name} to ${outputFile}`);
       // @ts-expect-error idk
       await minio.fGetObject(bucketName, data?.name || "", outputFile);
     }
