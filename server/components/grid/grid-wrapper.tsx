@@ -13,6 +13,7 @@ import { postRequest } from "@/lib/api/requestUtils";
 import { useRouter } from "next/navigation";
 import ActionCard from "./action-card";
 import { ImageType } from "@/types/types";
+import RefillDialog from "../dialog/refill-dialog";
 
 interface GridWrapperProps {
   latestImage: ImageType | null;
@@ -39,6 +40,7 @@ const GridWrapper: React.FC<GridWrapperProps> = ({
 }) => {
   const [volumeDialog, setVolumeDialog] = useState(false);
   const [wateringDialog, setWateringDialog] = useState(false);
+  const [refillDialog, setRefillDialog] = useState(false);
 
   const { refresh } = useRouter();
 
@@ -93,12 +95,12 @@ const GridWrapper: React.FC<GridWrapperProps> = ({
     <div className="grid grid-cols-1 gap-4 mt-6 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 pb-6">
       <GridCard
         content={timeSinceLastWatering}
-        description="Letzte Gießung vor"
+        description="Letzte Gießung"
         className="row-start-2 sm:row-start-1"
       />
       <GridCard
         content={nextWatering}
-        description="Nächste Gießung in"
+        description="Nächste Gießung"
         className="row-start-3 sm:row-start-1"
       />
       <GridCard
@@ -127,8 +129,8 @@ const GridWrapper: React.FC<GridWrapperProps> = ({
       />
       <GridCard
         content={refill}
-        description="Nachfüllen spätestens in"
-        onClick={() => {}}
+        description="Nachfüllen spätestens"
+        onClick={() => setRefillDialog(true)}
         buttonLabel="Jetzt Auffüllen"
         className="row-start-7 md:row-start-4 lg:row-start-3"
       />
@@ -148,6 +150,11 @@ const GridWrapper: React.FC<GridWrapperProps> = ({
         setOpen={setWateringDialog}
         onSave={onSaveWatering}
         steps={[10, 50, 250]}
+      />
+      <RefillDialog
+        refillAmount={plant?.waterTankVolume || 0}
+        open={refillDialog}
+        setOpen={setRefillDialog}
       />
     </div>
   );
