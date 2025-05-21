@@ -1,18 +1,11 @@
-import { calculateNextRefillDate } from "@/lib/utils";
+import { asyncLog, calculateNextRefillDate } from "@/lib/utils";
 import { prisma } from "@/prisma/prisma";
 import { format } from "date-fns";
+import "dotenv";
 
 const percentageToWater = 80; // Start watering if the water loss percentage is greater than this value
 
 const exec = async () => {
-  await prisma.watering.deleteMany({
-    where: {
-      wateredAt: {
-        gte: new Date(),
-      },
-    },
-  });
-
   const latestWatering = await prisma.watering.findFirst({
     orderBy: {
       wateredAt: "desc",
@@ -118,32 +111,30 @@ const exec = async () => {
     const { refillAt, amountOfWateringsBeforeRefill } =
       await calculateNextRefillDate();
 
-    console.log(`
-    -------------------------------------------------
-      Overview of values:
-    -------------------------------------------------
-      Weight before watering ${getDateString(
-        weightMeasurementBeforeWatering.measuredAt
-      )}: ${weightMeasurementBeforeWatering.weight}g
-      Weight after watering ${getDateString(
-        weightMeasurementAfterWatering.measuredAt
-      )}: ${weightMeasurementAfterWatering.weight}g
-      Watering amount: ${Math.floor(totalWateringAmount)}ml
-      Current weight ${getDateString(latestWeightMeasurement.measuredAt)}: ${
+    asyncLog(`
+New watering scheduled:
+
+Weight before watering ${getDateString(
+      weightMeasurementBeforeWatering.measuredAt
+    )}: ${weightMeasurementBeforeWatering.weight}g
+Weight after watering ${getDateString(
+      weightMeasurementAfterWatering.measuredAt
+    )}: ${weightMeasurementAfterWatering.weight}g
+Watering amount: ${Math.floor(totalWateringAmount)}ml
+Current weight ${getDateString(latestWeightMeasurement.measuredAt)}: ${
       latestWeightMeasurement.weight
     }g
-      Water loss until now: ${Math.floor(amountOfLostWater)}ml
-      Water loss percentage: ${waterLossPercentage}%
-      Days after last watering: ${daysAfterLastWatering}
-      Scheduled watering for: ${format(
-        new Date(scheduledWatering),
-        "dd.MM. HH:mm"
-      )} o'clock
-      Refill at: ${format(
-        refillAt,
-        "dd.MM HH:mm"
-      )} o'clock (${amountOfWateringsBeforeRefill} waterings)
-    -------------------------------------------------
+Water loss until now: ${Math.floor(amountOfLostWater)}ml
+Water loss percentage: ${waterLossPercentage}%
+Days after last watering: ${daysAfterLastWatering}
+Scheduled watering for: ${format(
+      new Date(scheduledWatering),
+      "dd.MM. HH:mm"
+    )} o'clock
+Refill at: ${format(
+      refillAt,
+      "dd.MM HH:mm"
+    )} o'clock (${amountOfWateringsBeforeRefill} waterings)
     `);
 
     console.log(

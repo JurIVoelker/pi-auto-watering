@@ -161,3 +161,29 @@ export const calculateNextRefillDate = async () => {
   );
   return { refillAt, avgDaysBetweenWaterings, amountOfWateringsBeforeRefill };
 };
+
+export const asyncLog = (message: string) => {
+  console.log(message);
+  const { TELEGRAM_BOT_TOKEN, TELEGRAM_CHAT_ID } = process.env;
+  if (!TELEGRAM_BOT_TOKEN || !TELEGRAM_CHAT_ID) {
+    console.error("Telegram bot token or chat ID is not set.");
+    return;
+  }
+  const url = `https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/sendMessage`;
+  const data = {
+    chat_id: TELEGRAM_CHAT_ID, // The chat ID where the message will be sent
+    text: message, // The message content
+  };
+
+  fetch(url, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(data),
+  })
+    .then((response) => response.json())
+    .catch((error) => {
+      console.error("Error sending message:", error);
+    });
+};
