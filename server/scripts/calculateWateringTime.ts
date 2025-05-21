@@ -1,3 +1,4 @@
+import { calculateNextRefillDate } from "@/lib/utils";
 import { prisma } from "@/prisma/prisma";
 import { format } from "date-fns";
 
@@ -114,48 +115,8 @@ const exec = async () => {
       },
     });
 
-    const lastWaterings = await prisma.watering.findMany({
-      where: {
-        plantId: plantConfig.id,
-      },
-      orderBy: {
-        wateredAt: "desc",
-      },
-      take: 4,
-    });
-
-    let avgDaysBetweenWaterings: number;
-    if (lastWaterings.length < 2) {
-      // Default to 7 days if not enough data
-      avgDaysBetweenWaterings = 7;
-    } else {
-      // Calculate average days between all waterings
-      const intervals = lastWaterings
-        .slice(0, lastWaterings.length - 1)
-        .map(
-          (w, i) =>
-            (w.wateredAt.getTime() - lastWaterings[i + 1].wateredAt.getTime()) /
-            (1000 * 60 * 60 * 24)
-        );
-      avgDaysBetweenWaterings = Math.floor(
-        intervals.reduce((sum, val) => sum + val, 0) / intervals.length
-      );
-    }
-
-    const amountOfWateringsBeforeRefill =
-      plantConfig.waterTankLevel !== 0 && plantConfig.wateringAmount !== 0
-        ? Math.floor(plantConfig.waterTankLevel / plantConfig.wateringAmount)
-        : 1;
-
-    const refillAt = new Date(
-      new Date().getTime() +
-        amountOfWateringsBeforeRefill *
-          avgDaysBetweenWaterings *
-          1000 *
-          60 *
-          60 *
-          24
-    );
+    const { refillAt, amountOfWateringsBeforeRefill } =
+      await calculateNextRefillDate();
 
     console.log(`
     -------------------------------------------------
