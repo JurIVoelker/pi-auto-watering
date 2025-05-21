@@ -1,5 +1,6 @@
 import { PLANT_ID } from "@/constants/constants";
 import { validateRequest } from "@/lib/api/auth";
+import { calculateNextRefillDate } from "@/lib/utils";
 import { prisma } from "@/prisma/prisma";
 import { revalidatePath } from "next/cache";
 import { NextRequest, NextResponse } from "next/server";
@@ -55,6 +56,18 @@ export async function POST(req: NextRequest) {
       refillAt,
     },
   });
+
+  if (waterTankVolume || waterTankLevel) {
+    const refillAtResult = await calculateNextRefillDate();
+    await prisma.plant.update({
+      where: {
+        id: PLANT_ID,
+      },
+      data: {
+        refillAt: refillAtResult.refillAt,
+      },
+    });
+  }
 
   revalidatePath("/dashboard");
 
