@@ -13,6 +13,9 @@ const Dashboard = async () => {
   const allWaterings = await prisma.watering.findMany({
     where: {
       plantId: PLANT_ID,
+      wateredAt: {
+        lte: new Date(),
+      },
     },
     orderBy: {
       wateredAt: "desc",

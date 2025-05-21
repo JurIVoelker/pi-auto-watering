@@ -7,6 +7,7 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
+    "watering": "npx tsx ./scripts/calculateWateringTime.ts",
     "prod:deploy": "npm run minio:import-migrations && npm run db:prod:migrate && npm run minio:export-migrations && npm run db:default-plant && npm run build",
     "prod:initial-deploy": "npx prisma migrate reset --schema ./prisma/prod.prisma --force && npm run db:prod:migrate && npm run minio:export-migrations && npm run db:default-plant && npm run build",
     "db:prod:migrate": "npx prisma migrate dev --name init --schema ./prisma/prod.prisma",
