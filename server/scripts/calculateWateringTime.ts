@@ -15,9 +15,6 @@ const exec = async () => {
   if (latestWatering === null) {
     console.log("No watering records found.");
     return;
-  } else if (latestWatering.wateredAt > new Date()) {
-    console.log("Latest watering is in the future.");
-    return;
   }
 
   const weightMeasurementBeforeWatering =
@@ -82,6 +79,25 @@ const exec = async () => {
     (new Date().getTime() - latestWatering.wateredAt.getTime()) /
       (1000 * 60 * 60 * 24)
   );
+
+  if (latestWatering.wateredAt > new Date()) {
+    console.log("Latest watering is in the future.");
+    asyncLog(`
+Weight before watering ${getDateString(
+      weightMeasurementBeforeWatering.measuredAt
+    )}: ${weightMeasurementBeforeWatering.weight}g
+Weight after watering ${getDateString(
+      weightMeasurementAfterWatering.measuredAt
+    )}: ${weightMeasurementAfterWatering.weight}g
+Watering amount: ${Math.floor(totalWateringAmount)}ml
+Current weight ${getDateString(latestWeightMeasurement.measuredAt)}: ${
+      latestWeightMeasurement.weight
+    }g
+Water loss until now: ${Math.floor(amountOfLostWater)}ml
+Water loss percentage: ${waterLossPercentage}%
+Days after last watering: ${daysAfterLastWatering}`);
+    return;
+  }
 
   if (waterLossPercentage > percentageToWater) {
     const scheduledWateringDate = new Date(
