@@ -82,7 +82,7 @@ const exec = async () => {
 
   if (latestWatering.wateredAt > new Date()) {
     console.log("Latest watering is in the future.");
-    asyncLog(`
+    await asyncLog(`
 Weight before watering ${getDateString(
       weightMeasurementBeforeWatering.measuredAt
     )}: ${weightMeasurementBeforeWatering.weight}g
@@ -127,7 +127,7 @@ Days after last watering: ${daysAfterLastWatering}`);
     const { refillAt, amountOfWateringsBeforeRefill } =
       await calculateNextRefillDate();
 
-    asyncLog(`
+    await asyncLog(`
 New watering scheduled:
 
 Weight before watering ${getDateString(

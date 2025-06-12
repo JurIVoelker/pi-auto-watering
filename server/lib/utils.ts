@@ -162,7 +162,7 @@ export const calculateNextRefillDate = async () => {
   return { refillAt, avgDaysBetweenWaterings, amountOfWateringsBeforeRefill };
 };
 
-export const asyncLog = (message: string) => {
+export const asyncLog = async (message: string) => {
   console.log(message);
   const { TELEGRAM_BOT_TOKEN, TELEGRAM_CHAT_ID } = process.env;
   if (!TELEGRAM_BOT_TOKEN || !TELEGRAM_CHAT_ID) {
@@ -175,15 +175,21 @@ export const asyncLog = (message: string) => {
     text: message, // The message content
   };
 
-  fetch(url, {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify(data),
-  })
-    .then((response) => response.json())
-    .catch((error) => {
-      console.error("Error sending message:", error);
+  try {
+    const response = await fetch(url, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(data),
     });
+    if (!response.ok) {
+      const errorText = await response.text();
+      console.error(
+        `Failed to send Telegram message: ${response.status} ${response.statusText} - ${errorText}`
+      );
+    }
+  } catch (error) {
+    console.error("Error sending Telegram message:", error);
+  }
 };
