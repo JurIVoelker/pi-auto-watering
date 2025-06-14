@@ -171,6 +171,21 @@ Refill at: ${format(
       },
     });
   } else {
+    console.log("Latest watering is in the future.");
+    await asyncLog(`
+Weight before watering ${getDateString(
+      weightMeasurementBeforeWatering.measuredAt
+    )}: ${weightMeasurementBeforeWatering.weight}g
+Weight after watering ${getDateString(
+      weightMeasurementAfterWatering.measuredAt
+    )}: ${weightMeasurementAfterWatering.weight}g
+Watering amount: ${Math.floor(totalWateringAmount)}ml
+Current weight ${getDateString(latestWeightMeasurement.measuredAt)}: ${
+      latestWeightMeasurement.weight
+    }g
+Water loss until now: ${Math.floor(amountOfLostWater)}ml
+Water loss percentage: ${waterLossPercentage}%
+Days after last watering: ${daysAfterLastWatering}`);
     console.log("No watering needed.");
   }
 };
