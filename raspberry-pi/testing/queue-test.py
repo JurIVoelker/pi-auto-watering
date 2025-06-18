@@ -14,7 +14,7 @@ q = Queue()
 last_weight_measurement = None
 measure_delay = datetime.timedelta(seconds=600)
 last_image_upload = None
-image_delay = datetime.timedelta(seconds=600)
+image_delay = datetime.timedelta(seconds=3600)
 
 print("Starting the queue processing loop...")
 
@@ -100,7 +100,10 @@ while True:
       q.put({"type": "measure_weight"})
       last_weight_measurement = get_current_time()
 
-    if last_image_upload is None or get_current_time() - last_image_upload >= image_delay:
+    if (
+      (last_image_upload is None or get_current_time() - last_image_upload >= image_delay)
+      and 8 < get_current_time().hour < 18
+    ):
       print("Adding image_capture and image_upload tasks to queue.")
       q.put({"type": "image_capture"})
       q.put({"type": "image_upload"})
@@ -123,4 +126,4 @@ while True:
   finally:
     GPIO.cleanup()
     print("Sleeping for 5 seconds...")
-    time.sleep(5)
+    time.sleep(30)
