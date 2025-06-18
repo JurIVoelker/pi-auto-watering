@@ -15,9 +15,6 @@ const exec = async () => {
   if (latestWatering === null) {
     console.log("No watering records found.");
     return;
-  } else if (latestWatering.wateredAt > new Date()) {
-    console.log("Latest watering is in the future.");
-    return;
   }
 
   const weightMeasurementBeforeWatering =
@@ -83,6 +80,25 @@ const exec = async () => {
       (1000 * 60 * 60 * 24)
   );
 
+  if (latestWatering.wateredAt > new Date()) {
+    console.log("Latest watering is in the future.");
+    await asyncLog(`
+Weight before watering ${getDateString(
+      weightMeasurementBeforeWatering.measuredAt
+    )}: ${weightMeasurementBeforeWatering.weight}g
+Weight after watering ${getDateString(
+      weightMeasurementAfterWatering.measuredAt
+    )}: ${weightMeasurementAfterWatering.weight}g
+Watering amount: ${Math.floor(totalWateringAmount)}ml
+Current weight ${getDateString(latestWeightMeasurement.measuredAt)}: ${
+      latestWeightMeasurement.weight
+    }g
+Water loss until now: ${Math.floor(amountOfLostWater)}ml
+Water loss percentage: ${waterLossPercentage}%
+Days after last watering: ${daysAfterLastWatering}`);
+    return;
+  }
+
   if (waterLossPercentage > percentageToWater) {
     const scheduledWateringDate = new Date(
       new Date().getTime() + 1000 * 60 * 60 * 24 * 2
@@ -111,7 +127,7 @@ const exec = async () => {
     const { refillAt, amountOfWateringsBeforeRefill } =
       await calculateNextRefillDate();
 
-    asyncLog(`
+    await asyncLog(`
 New watering scheduled:
 
 Weight before watering ${getDateString(
@@ -155,6 +171,21 @@ Refill at: ${format(
       },
     });
   } else {
+    console.log("Latest watering is in the future.");
+    await asyncLog(`
+Weight before watering ${getDateString(
+      weightMeasurementBeforeWatering.measuredAt
+    )}: ${weightMeasurementBeforeWatering.weight}g
+Weight after watering ${getDateString(
+      weightMeasurementAfterWatering.measuredAt
+    )}: ${weightMeasurementAfterWatering.weight}g
+Watering amount: ${Math.floor(totalWateringAmount)}ml
+Current weight ${getDateString(latestWeightMeasurement.measuredAt)}: ${
+      latestWeightMeasurement.weight
+    }g
+Water loss until now: ${Math.floor(amountOfLostWater)}ml
+Water loss percentage: ${waterLossPercentage}%
+Days after last watering: ${daysAfterLastWatering}`);
     console.log("No watering needed.");
   }
 };
