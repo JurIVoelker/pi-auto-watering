@@ -44,7 +44,7 @@ const PlantCard: React.FC<PlantCardProps> = ({ latestImage, plant }) => {
       <CardContent className="space-y-2">
         <ConnectionStatus lastPing={plant?.lastPingAt} />
         <Link
-          href="/images"
+          href="/images/0"
           className={cn(
             buttonVariants({ variant: "default" }),
             "w-full no-underline"
