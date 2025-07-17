@@ -1,3 +1,4 @@
+import ImagePagination from "@/components/image-pagination";
 import Wrapper from "@/components/wrapper";
 import { getRequest } from "@/lib/api/requestUtils";
 import Image from "next/image";
@@ -5,8 +6,17 @@ import Image from "next/image";
 export const revalidate = 3600;
 export const dynamic = "force-dynamic";
 
-const ImagesPage = async () => {
-  const response = await getRequest("/api/image/folders");
+const ImagesPage = async ({
+  params,
+}: {
+  params: Promise<{ currentPage: string }>;
+}) => {
+  const { currentPage } = await params;
+  const page = parseInt(currentPage);
+
+  const pageCountResponse = await getRequest("/api/image/count");
+  const { pageCount } = pageCountResponse.data as { pageCount: string };
+  const response = await getRequest("/api/image/folders?page=" + page);
   const folders = response as {
     data: { name: string; width: number; height: number }[];
   };
@@ -36,6 +46,7 @@ const ImagesPage = async () => {
           </div>
         ))}
       </div>
+      <ImagePagination currentPage={page} totalPages={parseInt(pageCount)} />
     </Wrapper>
   );
 };

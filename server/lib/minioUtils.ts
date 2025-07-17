@@ -123,7 +123,41 @@ export const getLatestImage = async () => {
   }
 };
 
-export const getImages = async () => {
+export const PAGE_SIZE = 20;
+
+export const getPageCount = async () => {
+  const { ENDPOINT, ACCESS_KEY, SECRET_KEY } = process.env;
+  const minio = new Client({
+    endPoint: ENDPOINT || "undefined",
+    useSSL: true,
+    accessKey: ACCESS_KEY || "undefined",
+    secretKey: SECRET_KEY || "undefined",
+  });
+
+  const directories: { prefix?: string; size?: number }[] = [];
+  await new Promise<void>((resolve, reject) => {
+    const stream = minio.listObjects(bucketName, "", false);
+
+    stream.on("data", (obj) => {
+      directories.push(obj);
+    });
+
+    stream.on("end", () => {
+      resolve();
+    });
+
+    stream.on("error", (err) => {
+      console.error(err);
+      reject(err);
+    });
+  });
+
+  const totalImages = directories.length;
+  const pageCount = Math.ceil(totalImages / PAGE_SIZE);
+  return pageCount;
+};
+
+export const getImages = async (start: number, end: number) => {
   const { ENDPOINT, ACCESS_KEY, SECRET_KEY } = process.env;
   const minio = new Client({
     endPoint: ENDPOINT || "undefined",
@@ -158,7 +192,7 @@ export const getImages = async () => {
     size?: number;
   }[] = [];
 
-  for (const directory of directories) {
+  for (const directory of directories.reverse().slice(start, end)) {
     const dirPrefix = directory.prefix?.replace("/", "") || "";
     const prefix = dirPrefix + "/" + dirPrefix + "_" + "14";
 
@@ -229,5 +263,5 @@ export const getImages = async () => {
       await minio.fGetObject(bucketName, data?.name || "", outputFile);
     }
   }
-  return images;
+  return images.reverse();
 };
